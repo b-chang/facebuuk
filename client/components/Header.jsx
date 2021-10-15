@@ -1,14 +1,17 @@
 import {
-  BellIcon,
-  ChatIcon,
-  ChevronDownIcon,
   FlagIcon,
   PlayIcon,
   SearchIcon,
   ShoppingCartIcon,
-  ViewGridIcon,
 } from '@heroicons/react/outline';
-import { HomeIcon, UserGroupIcon } from '@heroicons/react/solid';
+import {
+  BellIcon,
+  ChatIcon,
+  ChevronDownIcon,
+  HomeIcon,
+  UserGroupIcon,
+  ViewGridIcon,
+} from '@heroicons/react/solid';
 import Image from 'next/image';
 import HeaderIcon from './HeaderIcon';
 
