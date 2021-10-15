@@ -1,8 +1,12 @@
 import {
+  BellIcon,
+  ChatIcon,
+  ChevronDownIcon,
   FlagIcon,
   PlayIcon,
   SearchIcon,
   ShoppingCartIcon,
+  ViewGridIcon,
 } from '@heroicons/react/outline';
 import { HomeIcon, UserGroupIcon } from '@heroicons/react/solid';
 import Image from 'next/image';
@@ -22,7 +26,7 @@ const Header = () => {
         <div className="flex ml-2 rounded-full bg-gray-50 p-2">
           <SearchIcon className="h-6 text-gray-600" />
           <input
-            className="flex ml-2 items-center bg-transparent outline-none placeholder-gray-500 flex-shrink"
+            className="hidden md:inline-flex flex ml-2 items-center bg-transparent outline-none placeholder-gray-500 flex-shrink"
             type="text"
             placeholder="Search Facebook"
           />
@@ -41,8 +45,12 @@ const Header = () => {
       </div>
 
       {/* Right */}
-      <div>
+      <div className="flex items-center sm:space-x-2 justify-end">
         <p className="whitespace-nowrap font-semibold pr-3">Brandon Chang</p>
+        <ViewGridIcon className="icon" />
+        <ChatIcon className="icon" />
+        <BellIcon className="icon" />
+        <ChevronDownIcon className="icon" />
       </div>
     </div>
   );
