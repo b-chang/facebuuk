@@ -1,65 +1,21 @@
-// import { Alert, Box, Button, Card, TextField } from '@mui/material';
-import { navigate } from '@reach/router';
-import axios from 'axios';
+import { signIn } from 'next-auth/client';
 import React, { useState } from 'react';
-import './Form.styles.css';
 
-const Form = ({ title, FORM_TYPE, type, children }) => {
-  const [user, setUser] = useState({});
-  const [notif, setNotif] = useState({});
+const Form = () => {
+  const [user, setUser] = useState({ email: '', password: '' });
 
-  const handleLogin = async (user) => {
-    try {
-      const response = await axios.post(
-        'http://localhost:8000/api/login',
-        user,
-        {
-          withCredentials: true,
-          credentials: 'include',
-        }
-      );
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const { email, password } = user;
 
-      await navigate('/pirates');
-    } catch (err) {
-      const {
-        response: {
-          data: { message },
-        },
-      } = err;
-      setNotif({ msg: message, success: false });
-      setTimeout(() => {
-        setNotif({});
-      }, 10000);
-    }
-  };
-
-  const handleSignup = async (user) => {
-    try {
-      await axios.post('http://localhost:8000/api/signup', user);
-      navigate('/pirates');
-    } catch (err) {
-      const {
-        response: {
-          data: { message },
-        },
-      } = err;
-      setNotif({ msg: message, success: false });
-      setTimeout(() => {
-        setNotif({});
-      }, 10000);
-    }
-  };
-
-  const formSubmission = (event) => {
-    event.preventDefault();
-
-    if (type === 'LOGIN') {
-      handleLogin(user);
-    }
-
-    if (type === 'SIGN_UP') {
-      handleSignup(user);
-    }
+    signIn('credentials', {
+      email,
+      password,
+      // redirect: false,
+      // The page where you want to redirect to after a
+      // successful login
+      callbackUrl: `${window.location.origin}/`,
+    });
   };
 
   const handleChange = (e) => {
@@ -72,29 +28,39 @@ const Form = ({ title, FORM_TYPE, type, children }) => {
   };
 
   return (
-    <div sx={{ display: 'flex', alignItems: 'center' }}>
-      <p>{title}</p>
-      <form className="login-signup-form" onSubmit={formSubmission}>
-        {FORM_TYPE[type].map((field, idx) => (
-          <TextField
-            key={idx}
-            color="primary"
-            sx={{ m: 2, marginBottom: 0, color: 'red' }}
-            label={field[1]}
-            name={field[0]}
-            value={user[field[0]] || ''}
-            variant="outlined"
-            required
+    <div className="bg-white items-center p-2 shadow-md lg:px-5 lg:w-3/12 md:w-6/12">
+      <form onSubmit={handleLogin}>
+        <div>
+          <input
+            className="login"
+            name="email"
+            placeholder="email"
+            value={user.email}
             onChange={(e) => handleChange(e)}
-            type={
-              field[1] === 'password' || field[1] === 'confirm password'
-                ? 'password'
-                : 'text'
-            }
           />
-        ))}
-        <button type="submit">Submit</button>
+        </div>
+        <div>
+          <input
+            className="login"
+            type="password"
+            placeholder="password"
+            value={user.password}
+            name="password"
+            onChange={(e) => handleChange(e)}
+          />
+        </div>
+        <button className="btn" type="submit">
+          Log In
+        </button>
       </form>
+      <div className="flex flex-col">
+        <a className="flex justify-center pt-3 pb-5 border-b-2">
+          Forgot Password?
+        </a>
+        <button className="bg-green-600 text-white rounded-md p-3 max-w-xs m-auto mt-8 mb-3">
+          Create New Account
+        </button>
+      </div>
     </div>
   );
 };
