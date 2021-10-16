@@ -17,8 +17,9 @@ module.exports = {
 
   registerUser: async (req, res) => {
     try {
-      const { firstName, lastName, email, password, confirmPassword } = req.body;
-      let avatar = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=random&rounded=true`
+      const { firstName, lastName, email, password, confirmPassword, image } = req.body;
+      console.log(image)
+      // let avatar = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=random&rounded=true`
 
       if (password !== confirmPassword) {
         return res.status(400).json({ message: 'Password and Confirm Password must match.'});
@@ -30,7 +31,7 @@ module.exports = {
         email,
         password,
         confirmPassword,
-        avatar
+        image
       });
       const userToken = jwt.sign({
         id: newUser._id
@@ -49,6 +50,7 @@ module.exports = {
 
   login: async(req, res) => {
     const user = await User.findOne({ email: req.body.email });
+
     if(user === null) {
       return res.status(400).send({ message: "user does not exist."});
     }
@@ -67,7 +69,7 @@ module.exports = {
       .cookie("usertoken", userToken, secret, {
         httpOnly: true
       })
-      .json({ message: "Successful login!", accessToken: userToken});
+      .json({ message: "Successful login!", accessToken: userToken, image: user.image });
   },
 
   logout: async (req, res) => {

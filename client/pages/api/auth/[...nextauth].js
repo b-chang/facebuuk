@@ -17,8 +17,13 @@ const providers = [
           withCredentials: true,
           credentials: 'include',
         })
-
-        const { data: user } = response.config
+        
+        const { data } = response.config
+        const { image } = response.data
+        const user = {
+          data,
+          image
+        }
         if (response) {
           return user
         } 
@@ -40,9 +45,9 @@ callbacks.jwt = async function jwt(token, user) {
 }
 
 callbacks.session = async function session(session, token) {
-
     session.user = token.user
     session.accessToken = token.accessToken
+    session.image = token.picture
     return session
 }
 

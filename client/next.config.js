@@ -8,7 +8,8 @@ module.exports = {
       // "https://cdn0.iconfinder.com",
       "links.papareact.com",
       "platform-lookaside.fbsbx.com",
-      "firebasestorage.googleapis.com"
+      "firebasestorage.googleapis.com",
+      "static.independent.co.uk"
     ]
   }
 }

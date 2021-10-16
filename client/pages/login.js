@@ -1,7 +1,7 @@
 import React from 'react';
 import Form from '../components/Form';
 
-export default function login() {
+const login = () => {
   return (
     <div className="w-full">
       <Form />
@@ -9,4 +9,4 @@ export default function login() {
   )
 }
 
-
+export default login

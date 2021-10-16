@@ -11,7 +11,7 @@ export default function Home({ session }) {
         <title>Facebuuk</title>
       </Head>
 
-      <Header />
+      <Header session={session} />
       <main>
         {/* Sidebar */}
         {/* Feed */}
