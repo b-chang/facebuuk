@@ -10,6 +10,9 @@ app.use(cookieParser());
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(express.urlencoded({ extended: true }));
 
+require('./config/mongoose.config');
+require('./routes/routes.config')(app);
+
 app.listen(port, () => {
   console.log(
     chalk.red.bold(`🚀 🚀 🚀 Server is listening on port ${port} 🚀 🚀 🚀 `)
