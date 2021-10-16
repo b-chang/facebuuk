@@ -55,8 +55,7 @@ const Header = (props) => {
         <Image
           // onClick={() => signOut()}
           className="rounded-full cursor-pointed "
-          src={session.image}
-          // src="https://links.papareact.com/5me"
+          src={session.user.image}
           width="40"
           height="40"
           layout="fixed"

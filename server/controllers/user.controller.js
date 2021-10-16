@@ -60,6 +60,8 @@ module.exports = {
     if(!isPasswordCorrect) {
       return res.status(403).send({ message: "Password or email is incorrect."});
     }
+    
+    const name = `${user.firstName} ${user.lastName}`
 
     const userToken = jwt.sign({
       id: user._id
@@ -69,7 +71,7 @@ module.exports = {
       .cookie("usertoken", userToken, secret, {
         httpOnly: true
       })
-      .json({ message: "Successful login!", accessToken: userToken, image: user.image });
+      .json({ message: "Successful login!", accessToken: userToken, user: {name, image: user.image} });
   },
 
   logout: async (req, res) => {

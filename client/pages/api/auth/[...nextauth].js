@@ -17,11 +17,11 @@ const providers = [
           withCredentials: true,
           credentials: 'include',
         })
-        
+
         const { data } = response.config
-        const { image } = response.data
+        const { name, image } = response.data.user
         const user = {
-          data,
+          name,
           image
         }
         if (response) {
