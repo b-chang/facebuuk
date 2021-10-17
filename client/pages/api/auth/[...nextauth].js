@@ -1,6 +1,7 @@
 import axios from 'axios';
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
+const jwt_decode = require('jwt-decode');
 
 const providers = [
   Providers.Credentials({
@@ -18,9 +19,11 @@ const providers = [
           credentials: 'include',
         })
 
+        const id = jwt_decode(response.headers['set-cookie'][0])
         const { data } = response.config
         const { name, image } = response.data.user
         const user = {
+          ...id,
           name,
           image
         }

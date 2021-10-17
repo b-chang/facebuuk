@@ -3,7 +3,6 @@ import React from 'react';
 
 const SidebarRow = (props) => {
   const { src, Icon, title } = props;
-  console.log(src);
   return (
     <div className="flex items-center space-x-2 p-4 hover:bg-gray-200 rounded-xl cursor-pointer">
       {src && (

@@ -15,4 +15,8 @@
   .btn {
     @apply w-full bg-blue-500 text-white p-3 mt-2 mb-2 rounded-md;
   }
+
+  .inputIcon {
+    @apply flex items-center space-x-1 hover:bg-gray-100 flex-grow justify-center p-2 rounded-xl cursor-pointer;
+  }
 }
