@@ -1,8 +1,12 @@
-import { signIn } from 'next-auth/client';
+// import { signIn } from 'next-auth/client';
+import Link from 'next/link';
 import React, { useState } from 'react';
+import FORM_TYPE from './form-type';
 
-const Form = () => {
-  const [user, setUser] = useState({ email: '', password: '' });
+const Form = (props) => {
+  const { loginType, btnText } = props;
+  const { initialState, inputs } = FORM_TYPE[loginType];
+  const [user, setUser] = useState({ initialState });
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -30,27 +34,25 @@ const Form = () => {
   return (
     <div className="bg-white items-center p-2 shadow-md lg:px-5 lg:w-3/12 md:w-6/12">
       <form onSubmit={handleLogin}>
-        <div>
-          <input
-            className="login"
-            name="email"
-            placeholder="email"
-            value={user.email}
-            onChange={(e) => handleChange(e)}
-          />
-        </div>
-        <div>
-          <input
-            className="login"
-            type="password"
-            placeholder="password"
-            value={user.password}
-            name="password"
-            onChange={(e) => handleChange(e)}
-          />
-        </div>
+        {inputs.map((inputField, idx) => (
+          <div key={idx}>
+            <input
+              className="login"
+              name={inputField[0]}
+              placeholder={inputField[1]}
+              value={user[inputField[0]]}
+              onChange={(e) => handleChange(e)}
+              type={
+                inputField[0] === 'password' ||
+                inputField[0] === 'confirmPassword'
+                  ? 'password'
+                  : 'text'
+              }
+            />
+          </div>
+        ))}
         <button className="btn" type="submit">
-          Log In
+          {btnText}
         </button>
       </form>
       <div className="flex flex-col">
@@ -58,7 +60,9 @@ const Form = () => {
           Forgot Password?
         </a>
         <button className="bg-green-600 text-white rounded-md p-3 max-w-xs m-auto mt-8 mb-3">
-          Create New Account
+          <Link href={loginType === 'LOGIN' ? '/signup' : '/login'}>
+            {loginType === 'LOGIN' ? 'Create New Account' : 'Have an account?'}
+          </Link>
         </button>
       </div>
     </div>

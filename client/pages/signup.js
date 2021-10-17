@@ -1,12 +1,12 @@
 import React from 'react';
 import Form from '../components/Form';
 
-const login = () => {
+const signup = () => {
   return (
     <div className="w-full">
-      <Form loginType="LOGIN" btnText="Log in"/>
+      <Form loginType="SIGN_UP" btnText="Sign up" />
     </div>
   )
 }
 
-export default login
+export default signup
