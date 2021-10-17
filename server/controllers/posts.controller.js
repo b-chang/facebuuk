@@ -5,8 +5,8 @@ const jwt_decode = require('jwt-decode');
 module.exports = {
   getPosts: async (req, res) => {
     try {
-      const posts = await Post.find().sort([['updatedAt', 'descending']]);
-      res.json({ posts });
+      const posts = await Post.find().populate('author').sort([['createdAt', 'descending']]);
+      res.json(posts);
     } catch(e) {
       res.status(400).json(e);
     }
@@ -35,8 +35,8 @@ module.exports = {
 
   addPost: async (req, res) => {
     try {
-      const { id, content } = req.body;
-      const newPost = await Post.create({ content, author: id.toString() });
+      const { id, content, image } = req.body;
+      const newPost = await Post.create({ content, author: id.toString(), image });
       const user = await User.findOne({ _id: id});
       user.posts.push(newPost._id);
       user.save();

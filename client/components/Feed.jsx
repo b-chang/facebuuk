@@ -1,5 +1,6 @@
 import React from 'react';
 import AddPost from '../components/AddPost';
+import Posts from './Posts';
 import Stories from './Stories';
 
 const Feed = () => {
@@ -8,7 +9,7 @@ const Feed = () => {
       <div className="mx-auto max-w-md md:max-w-lg lg:max-w-2xl">
         <Stories />
         <AddPost />
-        {/* Posts */}
+        <Posts />
       </div>
     </div>
   );

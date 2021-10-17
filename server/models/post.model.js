@@ -10,34 +10,13 @@ const PostSchema = new mongoose.Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId, ref: 'User'
   },
+  image: {
+    type: String
+  },
   comments: [
     // { type: mongoose.Schema.Types.ObjectId, ref: 'Comments' }
     CommentSchema    
   ]
 }, {timestamps: true});
-
-PostSchema.pre('find', function(next) {
-  this.populate('user');
-  next();
-});
-
-PostSchema.pre('findOne', function(next) {
-  this.populate('user');
-  next();
-});
-
-PostSchema.virtual('fullName').get(function() {
-  return `${this.user.firstName} ${this.user.lastName}`.trim();
-});
-
-PostSchema.methods.serialize = function() {
-  return {
-    id: this._id,
-    user: this.userName,
-    content: this.content,
-    title: this.title,
-    comments: this.comments
-  };
-};
 
 module.exports = mongoose.model('Post', PostSchema)

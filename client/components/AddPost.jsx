@@ -3,11 +3,13 @@ import { CameraIcon, VideoCameraIcon } from '@heroicons/react/solid';
 import axios from 'axios';
 import { useSession } from 'next-auth/client';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 const AddPost = () => {
   const [session] = useSession();
   const [postInput, setPostInput] = useState('');
+  const [imageToPost, setImageToPost] = useState(null);
+  const filePickerRef = useRef(null);
 
   const createPost = async (post) => {
     try {
@@ -32,8 +34,25 @@ const AddPost = () => {
     const post = {
       content: postInput,
       id: session.user.id,
+      image: imageToPost,
     };
     createPost(post);
+  };
+
+  const addImageToPost = (e) => {
+    const reader = new FileReader();
+    if (e.target.files[0]) {
+      reader.readAsDataURL(e.target.files[0]);
+    }
+
+    reader.onload = (readerEvent) => {
+      console.log(readerEvent);
+      setImageToPost(readerEvent.target.result);
+    };
+  };
+
+  const removeImage = () => {
+    setImageToPost(null);
   };
 
   return (
@@ -58,15 +77,34 @@ const AddPost = () => {
             Submit
           </button>
         </form>
+        {imageToPost && (
+          <div
+            onClick={() => removeImage()}
+            className="flex flex-col filter hover:brightness-110 transition duration-150 transform hover:scale-105 cursor-pointer"
+          >
+            <img className="h-10 object-contain" src={imageToPost} alt="" />
+            <p className="text-xs text-red-500 text-center">Remove</p>
+          </div>
+        )}
       </div>
       <div className="flex justify-evenly p-3 border-t">
         <div className="inputIcon">
           <VideoCameraIcon className="h-7 text-red-500" />
           <p className="text-xs sm:text-sm xl:text-base">Live Video</p>
         </div>
-        <div className="inputIcon">
+        <div
+          onClick={() => filePickerRef.current.click()}
+          className="inputIcon"
+        >
           <CameraIcon className="h-7 text-green-500" />
           <p className="text-xs sm:text-sm xl:text-base">Photo/Video</p>
+          <input
+            ref={filePickerRef}
+            onChange={(e) => addImageToPost(e)}
+            name="imageOnPost"
+            type="file"
+            hidden
+          />
         </div>
         <div className="inputIcon">
           <EmojiHappyIcon className="h-7 text-yellow-500" />
