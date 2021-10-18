@@ -1,4 +1,5 @@
-// import { signIn } from 'next-auth/client';
+import axios from 'axios';
+import { signIn } from 'next-auth/client';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import FORM_TYPE from './form-type';
@@ -6,15 +7,27 @@ import FORM_TYPE from './form-type';
 const Form = (props) => {
   const { loginType, btnText } = props;
   const { initialState, inputs } = FORM_TYPE[loginType];
-  const [user, setUser] = useState({ initialState });
+  console.log(initialState);
+  const [user, setUser] = useState({ ...initialState });
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const { email, password } = user;
+
+    if (loginType === 'SIGN_UP') {
+      console.log('trying to sign up');
+      try {
+        const response = await axios.post(
+          'http://localhost:8000/api/signup',
+          user
+        );
+        console.log(response);
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
     signIn('credentials', {
-      email,
-      password,
+      ...user,
       // redirect: false,
       // The page where you want to redirect to after a
       // successful login

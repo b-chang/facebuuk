@@ -18,8 +18,13 @@ module.exports = {
   registerUser: async (req, res) => {
     try {
       const { firstName, lastName, email, password, confirmPassword, image } = req.body;
-      console.log(image)
-      // let avatar = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=random&rounded=true`
+      let defaultImage; 
+
+      if (image === undefined) {
+        defaultImage = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=random&rounded=true`
+      }
+
+      console.log(defaultImage)
 
       if (password !== confirmPassword) {
         return res.status(400).json({ message: 'Password and Confirm Password must match.'});
@@ -29,9 +34,9 @@ module.exports = {
         firstName,
         lastName,
         email,
+        image: image || defaultImage,
         password,
-        confirmPassword,
-        image
+        confirmPassword
       });
       const userToken = jwt.sign({
         id: newUser._id

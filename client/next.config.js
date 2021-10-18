@@ -5,7 +5,7 @@ module.exports = {
   },
   images: {
     domains: [
-      // "https://cdn0.iconfinder.com",
+      "ui-avatars.com",
       "links.papareact.com",
       "platform-lookaside.fbsbx.com",
       "firebasestorage.googleapis.com",
