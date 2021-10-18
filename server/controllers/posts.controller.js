@@ -69,7 +69,12 @@ module.exports = {
     try {
       const { _id } = req.body
       const post = await Post.findOne({ _id: req.params.id })
-
+      if (req.body.removeLike) {
+        post.likes.pull({ _id: req.body._id })
+        post.save()
+        return res.json({ message: 'Successfully un-liked' })
+      }
+      
       const convertIDtoStrings = post.likes.map(id => id.toString())
       const isLiked = convertIDtoStrings.includes(_id)
 

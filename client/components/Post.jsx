@@ -1,25 +1,43 @@
-import { ChatAltIcon, ShareIcon, ThumbUpIcon } from '@heroicons/react/outline';
+import {
+  ChatAltIcon,
+  ShareIcon,
+  ThumbUpIcon as ThumUpIconOutline,
+} from '@heroicons/react/outline';
+import { ThumbUpIcon as ThumUpIconFilled } from '@heroicons/react/solid';
 import axios from 'axios';
+import { useSession } from 'next-auth/client';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Post = ({ post }) => {
-  const { content, author, createdAt, image: postImage, _id: id } = post;
+  const { content, author, createdAt, image: postImage, _id: id, likes } = post;
   const { firstName, lastName, image, _id } = author;
-  const [isLiked, setIsLiked] = useState(false);
+  const [session] = useSession();
+  const { user } = session;
+  const [hasLiked, setHasLiked] = useState(false);
   const date = new Date(createdAt).toLocaleString();
+
+  const colorLikeButton = () => {
+    if (likes.includes(user.id)) {
+      setHasLiked(true);
+    }
+  };
 
   const likePost = async () => {
     try {
       const response = await axios.put(
         `http://localhost:8000/api/posts/${id}/like-post`,
-        { _id: _id }
+        { _id: _id, removeLike: hasLiked ? true : false }
       );
-      console.log(response);
+      setHasLiked(!hasLiked);
     } catch (e) {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    colorLikeButton();
+  }, [hasLiked]);
 
   // @WIP add live reloading. currently only displays new posts on refresh
   return (
@@ -50,8 +68,20 @@ const Post = ({ post }) => {
           className="inputIcon rounded-none rounded-bl-2xl"
           onClick={() => likePost()}
         >
-          <ThumbUpIcon className="h-4" />
-          <p className="text-xs sm:text-base">Like</p>
+          {hasLiked ? (
+            <ThumUpIconFilled className="h-4 text-blue-500" />
+          ) : (
+            <ThumUpIconOutline className="h-4" />
+          )}
+          <p
+            className={
+              hasLiked
+                ? 'text-xs sm:text-base text-blue-500'
+                : 'text-xs sm:text-base'
+            }
+          >
+            Like
+          </p>
         </div>
         <div className="inputIcon rounded-none">
           <ChatAltIcon className="h-4" />
