@@ -7,14 +7,12 @@ import FORM_TYPE from './form-type';
 const Form = (props) => {
   const { loginType, btnText } = props;
   const { initialState, inputs } = FORM_TYPE[loginType];
-  console.log(initialState);
   const [user, setUser] = useState({ ...initialState });
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     if (loginType === 'SIGN_UP') {
-      console.log('trying to sign up');
       try {
         const response = await axios.post(
           'http://localhost:8000/api/signup',

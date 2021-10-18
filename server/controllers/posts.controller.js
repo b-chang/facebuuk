@@ -40,9 +40,9 @@ module.exports = {
       const user = await User.findOne({ _id: id});
       user.posts.push(newPost._id);
       user.save();
-      res.json({ message: "Successfully added new post", newPost });
+      return res.json({ message: "Successfully added new post", newPost });
     } catch(e) {
-      res.status(400).json(e);
+      return res.status(400).json(e);
     }
   },
 
@@ -59,9 +59,29 @@ module.exports = {
 
       post.comments.push(comment);
       post.save();
-      res.json({ message: "Successfully added a comment to blog post", post });
+      return res.json({ message: "Successfully added a comment to blog post", post });
     } catch(e) {
-      res.status(400).json(e);
+      return res.status(400).json(e);
+    }
+  },
+  
+  likePost: async (req, res) => {
+    try {
+      const { _id } = req.body
+      const post = await Post.findOne({ _id: req.params.id })
+
+      const convertIDtoStrings = post.likes.map(id => id.toString())
+      const isLiked = convertIDtoStrings.includes(_id)
+
+      if (isLiked) {
+        return res.json({ message: 'You have already liked this post!' })
+      }
+
+      post.likes.push(_id)
+      await post.save();
+      return res.json({ message: "Successfully liked a post", post });
+    } catch (e) {
+      return res.status(400).json(e)
     }
   }
 }

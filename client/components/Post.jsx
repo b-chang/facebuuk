@@ -1,11 +1,25 @@
 import { ChatAltIcon, ShareIcon, ThumbUpIcon } from '@heroicons/react/outline';
+import axios from 'axios';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 
 const Post = ({ post }) => {
-  const { content, author, createdAt, image: postImage } = post;
-  const { firstName, lastName, image } = author;
+  const { content, author, createdAt, image: postImage, _id: id } = post;
+  const { firstName, lastName, image, _id } = author;
+  const [isLiked, setIsLiked] = useState(false);
   const date = new Date(createdAt).toLocaleString();
+
+  const likePost = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/api/posts/${id}/like-post`,
+        { _id: _id }
+      );
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   // @WIP add live reloading. currently only displays new posts on refresh
   return (
@@ -32,7 +46,10 @@ const Post = ({ post }) => {
         </div>
       )}
       <div className="flex justify-between items-center rounded-b-2xl bg-white shadow-md text-gray-400 border-t">
-        <div className="inputIcon rounded-none rounded-bl-2xl">
+        <div
+          className="inputIcon rounded-none rounded-bl-2xl"
+          onClick={() => likePost()}
+        >
           <ThumbUpIcon className="h-4" />
           <p className="text-xs sm:text-base">Like</p>
         </div>

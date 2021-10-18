@@ -46,7 +46,6 @@ const AddPost = () => {
     }
 
     reader.onload = (readerEvent) => {
-      console.log(readerEvent);
       setImageToPost(readerEvent.target.result);
     };
   };

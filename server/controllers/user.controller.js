@@ -9,18 +9,18 @@ module.exports = {
   getUsers: async (req, res) => {
     try {
       const users = await User.find();
-      res.json({ users });
+      return res.json({ users });
     } catch(e) {
-      res.status(400).json(e);
+      return res.status(400).json(e);
     }
   },
 
   updateUser: async (req, res) => {
     try {
       const users = await User.findOneAndUpdate({ _id: req.params.id}, req.body);
-      res.json({ users });
+      return res.json({ users });
     } catch(e) {
-      res.status(400).json(e);
+      return res.status(400).json(e);
     }
   },
 
@@ -30,7 +30,7 @@ module.exports = {
       let defaultImage; 
 
       if (image === undefined) {
-        defaultImage = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=0062cc&color=FFFFF&rounded=true`
+        defaultImage = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=0062cc&color=FFFFFF&rounded=true`
       }
 
       console.log(defaultImage)
