@@ -7,18 +7,49 @@ import {
 import {
   BellIcon,
   ChatIcon,
-  ChevronDownIcon,
   HomeIcon,
   UserGroupIcon,
   ViewGridIcon,
 } from '@heroicons/react/solid';
-import { signOut } from 'next-auth/client';
+import axios from 'axios';
 import Image from 'next/image';
+import React, { useRef, useState } from 'react';
+import Dropdown from './Dropdown';
 import HeaderIcon from './HeaderIcon';
 
 const Header = (props) => {
   const { session } = props;
   const { user } = session;
+  const [editProfileImage, setEditProfileImage] = useState(null);
+  const filePickerRef = useRef(null);
+  const [updatePic, setUpdatePic] = useState(false);
+
+  const uploadProfilePic = (e) => {
+    const reader = new FileReader();
+    if (e.target.files[0]) {
+      reader.readAsDataURL(e.target.files[0]);
+    }
+
+    reader.onload = (readerEvent) => {
+      const image = readerEvent.target.result;
+      updateProfilePic(image);
+    };
+  };
+
+  const updateProfilePic = async (newImage) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/api/user/${user.id}`,
+        {
+          image: newImage,
+        }
+      );
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div className="sticky top-0 z-50 bg-white flex items-center p-2 lg:px-5 shadow-md">
       {/* Left */}
@@ -54,12 +85,20 @@ const Header = (props) => {
       <div className="flex items-center sm:space-x-2 justify-end">
         {/* profile pic */}
         <Image
-          onClick={() => signOut()}
-          className="rounded-full cursor-pointed "
+          className="rounded-full cursor-pointer"
           src={session.user.image}
           width="40"
           height="40"
           layout="fixed"
+          // onClick={(e) => editProfilePic(e)}
+          onClick={() => filePickerRef.current.click()}
+        />
+        <input
+          ref={filePickerRef}
+          onChange={(e) => uploadProfilePic(e)}
+          name="imageOnPost"
+          type="file"
+          hidden
         />
         <p className="hidden sm:inline-flex whitespace-nowrap font-semibold pr-3">
           {user.name}
@@ -67,7 +106,7 @@ const Header = (props) => {
         <ViewGridIcon className="icon" />
         <ChatIcon className="icon" />
         <BellIcon className="icon" />
-        <ChevronDownIcon className="icon" />
+        <Dropdown />
       </div>
     </div>
   );

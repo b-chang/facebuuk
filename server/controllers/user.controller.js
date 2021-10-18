@@ -15,13 +15,22 @@ module.exports = {
     }
   },
 
+  updateUser: async (req, res) => {
+    try {
+      const users = await User.findOneAndUpdate({ _id: req.params.id}, req.body);
+      res.json({ users });
+    } catch(e) {
+      res.status(400).json(e);
+    }
+  },
+
   registerUser: async (req, res) => {
     try {
       const { firstName, lastName, email, password, confirmPassword, image } = req.body;
       let defaultImage; 
 
       if (image === undefined) {
-        defaultImage = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=random&rounded=true`
+        defaultImage = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=0062cc&color=FFFFF&rounded=true`
       }
 
       console.log(defaultImage)
