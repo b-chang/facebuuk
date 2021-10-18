@@ -40,7 +40,8 @@ module.exports = {
       const user = await User.findOne({ _id: id});
       user.posts.push(newPost._id);
       user.save();
-      return res.json({ message: "Successfully added new post", newPost });
+      const post = await Post.findOne({_id: newPost._id}).populate('author')
+      return res.json({ message: "Successfully added new post", newPost: post });
     } catch(e) {
       return res.status(400).json(e);
     }

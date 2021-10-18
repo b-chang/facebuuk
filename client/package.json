@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
+    "@reduxjs/toolkit": "^1.6.2",
     "autoprefixer": "^10.3.7",
     "axios": "^0.23.0",
     "bcrypt": "^5.0.1",
@@ -21,6 +22,7 @@
     "postcss": "^8.3.9",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-redux": "^7.2.5",
     "superjson": "^1.7.5",
     "tailwind-scrollbar-hide": "^1.0.3",
     "tailwindcss": "^2.2.17"

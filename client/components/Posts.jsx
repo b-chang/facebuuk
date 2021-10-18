@@ -1,32 +1,20 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPosts, selectPosts } from '../store/post/post.reducer';
 import Post from './Post';
 
 const Posts = () => {
-  const [displayPosts, setDisplayPosts] = useState([]);
-
-  const fetchAllPosts = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/posts', {
-        withCredentials: true,
-        credentials: 'include',
-      });
-      setDisplayPosts((prev) => [...prev, ...response.data]);
-    } catch (e) {
-      // @WIP need to add better error handling
-      console.log(e);
-    }
-  };
+  const { posts, loading } = useSelector(selectPosts);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchAllPosts();
-  }, []);
+    dispatch(fetchPosts());
+  }, [dispatch]);
 
   return (
     <div>
-      {displayPosts.map((post, idx) => (
-        <Post key={idx} post={post} />
-      ))}
+      {loading === 'loaded' &&
+        posts.map((post, idx) => <Post key={idx} post={post} />)}
     </div>
   );
 };

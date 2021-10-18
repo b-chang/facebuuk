@@ -1,32 +1,17 @@
 import { EmojiHappyIcon } from '@heroicons/react/outline';
 import { CameraIcon, VideoCameraIcon } from '@heroicons/react/solid';
-import axios from 'axios';
 import { useSession } from 'next-auth/client';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addPost } from '../store/post/post.reducer';
 
 const AddPost = () => {
   const [session] = useSession();
   const [postInput, setPostInput] = useState('');
   const [imageToPost, setImageToPost] = useState(null);
   const filePickerRef = useRef(null);
-
-  const createPost = async (post) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:8000/api/posts`,
-        post,
-        {
-          withCredentials: true,
-          credentials: 'include',
-        }
-      );
-      // @WIP need to add proper success and error message handling
-      console.log(response);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const dispatch = useDispatch();
 
   const submitPost = (e) => {
     e.preventDefault();
@@ -36,7 +21,8 @@ const AddPost = () => {
       id: session.user.id,
       image: imageToPost,
     };
-    createPost(post);
+    dispatch(addPost(post));
+    setPostInput('');
   };
 
   const addImageToPost = (e) => {
