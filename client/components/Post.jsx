@@ -77,13 +77,15 @@ const Post = ({ post }) => {
         <div className="flex items-center space-x-2">
           <ThumUpIconFilled className="h-4 text-blue-500" />
           {numberOfLikes ? (
-            <p className="text-blue-500">{numberOfLikes}</p>
+            <p className="text-sm text-blue-500 sm:text-base">
+              {numberOfLikes}
+            </p>
           ) : (
             ''
           )}
         </div>
         <p
-          className="cursor-pointer hover:underline"
+          className="text-xs cursor-pointer hover:underline sm:text-base"
           onClick={() => setDisplayComments((prev) => !prev)}
         >
           {numberOfComments ? numberOfComments : null} comments
@@ -127,9 +129,28 @@ const Post = ({ post }) => {
           <p className="text-xs sm:text-base">Share</p>
         </div>
       </div>
-      {displayCommentInput ? <CommentInput user={user} id={id} /> : ''}
+      {displayCommentInput && !displayComments ? (
+        <CommentInput user={user} id={id} />
+      ) : (
+        ''
+      )}
       <div className="rounded-b-2xl bg-white shadow-md">
-        {displayComments
+        {displayComments ? (
+          <>
+            <CommentInput user={user} id={id} />
+            {post.comments.map((comment, idx) => (
+              <Comment
+                key={idx}
+                comment={comment}
+                index={idx}
+                size={post.comments.length}
+              />
+            ))}
+          </>
+        ) : (
+          ''
+        )}
+        {/* {displayComments
           ? post.comments.map((comment, idx) => (
               <Comment
                 key={idx}
@@ -138,7 +159,7 @@ const Post = ({ post }) => {
                 size={post.comments.length}
               />
             ))
-          : ''}
+          : ''} */}
       </div>
       {/* {displayComments
         ? post.comments.map((comment, idx) => (
