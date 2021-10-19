@@ -33,8 +33,6 @@ module.exports = {
         defaultImage = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=0062cc&color=FFFFFF&rounded=true`
       }
 
-      console.log(defaultImage)
-
       if (password !== confirmPassword) {
         return res.status(400).json({ message: 'Password and Confirm Password must match.'});
       }

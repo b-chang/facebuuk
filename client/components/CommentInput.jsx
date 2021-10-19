@@ -20,14 +20,15 @@ const CommentInput = (props) => {
         `http://localhost:8000/api/posts/${id}/comment`,
         commentor
       );
-      console.warn(response);
+      console.log(response);
+      setComment('');
     } catch (e) {
       console.log(e);
     }
   };
 
   return (
-    <div className="flex items-center space-x-1 bg-white shadow-md text-gray-400 rounded-b-2xl p-4 border-t">
+    <div className="flex items-center space-x-1 bg-white shadow-md text-gray-400 p-4 border-t">
       <Image
         className="rounded-full"
         src={user.image}

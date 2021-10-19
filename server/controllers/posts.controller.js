@@ -6,7 +6,7 @@ const jwt_decode = require('jwt-decode');
 module.exports = {
   getPosts: async (req, res) => {
     try {
-      const posts = await Post.find().populate('comments').populate('author').sort([['createdAt', 'descending']]);
+      const posts = await Post.find().populate('comments').populate({path: 'comments', populate: { path: 'author', model: 'User' }}).populate('author').sort([['createdAt', 'descending']]);
       res.json(posts);
     } catch(e) {
       res.status(400).json(e);
