@@ -18,8 +18,7 @@ import Dropdown from './Dropdown';
 import HeaderIcon from './HeaderIcon';
 
 const Header = (props) => {
-  const { session } = props;
-  const { user } = session;
+  const { user } = props;
   const [editProfileImage, setEditProfileImage] = useState(null);
   const filePickerRef = useRef(null);
   const [updatePic, setUpdatePic] = useState(false);
@@ -86,7 +85,8 @@ const Header = (props) => {
         {/* profile pic */}
         <Image
           className="rounded-full cursor-pointer"
-          src={session.user.image}
+          src={user.image}
+          // src="https://links.papareact.com/k2j"
           width="40"
           height="40"
           layout="fixed"
@@ -101,7 +101,7 @@ const Header = (props) => {
           hidden
         />
         <p className="hidden sm:inline-flex whitespace-nowrap font-semibold pr-3">
-          {user.name}
+          {user.firstName} {user.lastName}
         </p>
         <ViewGridIcon className="icon" />
         <ChatIcon className="icon" />

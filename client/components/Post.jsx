@@ -5,17 +5,18 @@ import {
 } from '@heroicons/react/outline';
 import { ThumbUpIcon as ThumUpIconFilled } from '@heroicons/react/solid';
 import axios from 'axios';
-import { useSession } from 'next-auth/client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import CommentInput from './CommentInput';
 import Comments from './Comments';
 
 const Post = ({ post }) => {
   const { content, author, createdAt, image: postImage, _id: id, likes } = post;
   const { firstName, lastName, image, _id } = author;
-  const [session] = useSession();
-  const { user } = session;
+  const state = useSelector((state) => state);
+  const { data, loading } = state.user;
+
   const [hasLiked, setHasLiked] = useState(false);
   const [displayComments, setDisplayComments] = useState(false);
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
@@ -24,7 +25,7 @@ const Post = ({ post }) => {
   const numberOfComments = post.comments.length;
 
   const colorLikeButton = () => {
-    if (likes.includes(user.id)) {
+    if (likes.includes(data._id)) {
       setHasLiked(true);
     }
   };
@@ -115,14 +116,12 @@ const Post = ({ post }) => {
             Like
           </p>
         </div>
-        <div className="inputIcon rounded-none">
+        <div
+          className="inputIcon rounded-none"
+          onClick={() => showCommentInput()}
+        >
           <ChatAltIcon className="h-4" />
-          <p
-            className="text-xs sm:text-base"
-            onClick={() => showCommentInput()}
-          >
-            Comment
-          </p>
+          <p className="text-xs sm:text-base">Comment</p>
         </div>
         <div className="inputIcon rounded-none rounded-br-2xl">
           <ShareIcon className="h-4" />
@@ -130,12 +129,12 @@ const Post = ({ post }) => {
         </div>
       </div>
       {displayCommentInput && !displayComments ? (
-        <CommentInput user={user} id={id} />
+        <CommentInput user={data} id={id} />
       ) : (
         ''
       )}
       <div className="rounded-b-2xl bg-white shadow-md">
-        {displayComments ? <Comments user={user} id={id} post={post} /> : ''}
+        {displayComments ? <Comments user={data} id={id} post={post} /> : ''}
       </div>
     </div>
   );

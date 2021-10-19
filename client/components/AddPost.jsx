@@ -1,24 +1,25 @@
 import { EmojiHappyIcon } from '@heroicons/react/outline';
 import { CameraIcon, VideoCameraIcon } from '@heroicons/react/solid';
-import { useSession } from 'next-auth/client';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addPost } from '../store/post/post.reducer';
 
 const AddPost = () => {
-  const [session] = useSession();
   const [postInput, setPostInput] = useState('');
   const [imageToPost, setImageToPost] = useState(null);
   const filePickerRef = useRef(null);
   const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  const { data, loading } = state.user;
+  const name = `${data.firstName} ${data.lastName}`;
 
   const submitPost = (e) => {
     e.preventDefault();
 
     const post = {
       content: postInput,
-      id: session.user.id,
+      id: data._id,
       image: imageToPost,
     };
     dispatch(addPost(post));
@@ -43,18 +44,21 @@ const AddPost = () => {
   return (
     <div className="bg-white p-2 rounded-2xl shadow-md text-gray-500 font-medium mt-6">
       <div className="flex space-x-4 p-4 items-center">
-        <Image
-          className="rounded-full"
-          src={session.user.image}
-          width={40}
-          height={40}
-          layout="fixed"
-        />
+        {loading === 'loaded' && (
+          <Image
+            className="rounded-full"
+            src={data.image}
+            // src="https://links.papareact.com/k2j"
+            width={40}
+            height={40}
+            layout="fixed"
+          />
+        )}
         <form className="flex flex-1" onSubmit={(e) => submitPost(e)}>
           <input
             className="rounded-full h-12 bg-gray-100 flex-grow px-5 focus:outline-none"
             type="text"
-            placeholder={`What's on your mind, ${session.user.name}?`}
+            placeholder={`What's on your mind, ${name}?`}
             value={postInput}
             onChange={(e) => setPostInput(e.target.value)}
           />

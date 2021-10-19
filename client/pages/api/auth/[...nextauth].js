@@ -21,11 +21,12 @@ const providers = [
 
         const id = jwt_decode(response.headers['set-cookie'][0])
         const { data } = response.config
-        const { name, image } = response.data.user
+        // get rid of image
+        // do it one time on the feed page and store it in global store
+        const { name } = response.data.user
         const user = {
           ...id,
-          name,
-          image
+          name
         }
         if (response) {
           return user
@@ -50,7 +51,6 @@ callbacks.jwt = async function jwt(token, user) {
 callbacks.session = async function session(session, token) {
     session.user = token.user
     session.accessToken = token.accessToken
-    session.image = token.picture
     return session
 }
 

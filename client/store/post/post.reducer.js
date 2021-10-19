@@ -3,6 +3,17 @@ import axios from 'axios';
 
 const url = 'http://localhost:8000/api/posts'
 
+export const fetchUser = createAsyncThunk(
+  'posts/fetchUser', async (id, thunkAPI) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/user/${id}`);
+      return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue({ error: error.message });
+    }
+});
+
+
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts', async (_, thunkAPI) => {
     try {
@@ -22,6 +33,29 @@ export const addPost = createAsyncThunk(
     } catch (error) {
         return thunkAPI.rejectWithValue({ error: error.message });
     }
+});
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState: { data: {}, loading: 'idle', error: '' },
+  reducers: {},
+  extraReducers: (builder) => {
+    // get all posts
+    builder.addCase(fetchUser.pending, (state) => {
+      state.data = {};
+      state.loading = "loading";
+    });
+    builder.addCase(
+      fetchUser.fulfilled, (state, { payload }) => {
+        state.data = payload;
+        state.loading = "loaded";
+    });
+    builder.addCase(
+      fetchUser.rejected,(state, action) => {
+        state.loading = "error";
+        state.error = action.error.message;
+    });
+  }
 });
 
 const postsSlice = createSlice({
@@ -141,4 +175,4 @@ export const selectPosts = createSelector(
 //   }), (state) =>  state
 // );
 
-export default { postsSlice, postSlice, selectPosts };
+export default { postsSlice, postSlice, userSlice, selectPosts };

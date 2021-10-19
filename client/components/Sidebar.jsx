@@ -9,16 +9,18 @@ import {
   DesktopComputerIcon,
   UsersIcon,
 } from '@heroicons/react/solid';
-import { useSession } from 'next-auth/client';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import SidebarRow from './SidebarRow';
 
 const Sidebar = () => {
-  const [session, loading] = useSession();
+  const state = useSelector((state) => state);
+  const { data, loading } = state.user;
+  const name = `${data.firstName} ${data.lastName}`;
 
   return (
     <div className="p-2 mt-5 max-w-[600px] xl:min-w[300px]">
-      <SidebarRow src={session.user.image} title={session.user.name} />
+      {loading === 'loaded' && <SidebarRow src={data.image} title={name} />}
       <SidebarRow Icon={UsersIcon} title="Friends" />
       <SidebarRow Icon={UserGroupIcon} title="Groups" />
       <SidebarRow Icon={ShoppingBagIcon} title="Marketplace" />

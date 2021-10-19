@@ -6,6 +6,15 @@ const secret = require('../config/jwt.config');
 const SECRET_KEY = 'mysupersecretkey123';
 
 module.exports = {
+  getUser: async (req, res) => {
+    try {
+      const user = await User.findOne({ _id: req.params.id});
+      return res.json(user);
+    } catch(e) {
+      return res.status(400).json(e);
+    }
+  },
+
   getUsers: async (req, res) => {
     try {
       const users = await User.find();
