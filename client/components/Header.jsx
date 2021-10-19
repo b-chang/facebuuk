@@ -38,7 +38,7 @@ const Header = (props) => {
   const updateProfilePic = async (newImage) => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/user/${user.id}`,
+        `http://localhost:8000/api/user/${user._id}`,
         {
           image: newImage,
         }

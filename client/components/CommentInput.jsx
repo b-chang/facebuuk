@@ -12,7 +12,7 @@ const CommentInput = (props) => {
     e.preventDefault();
 
     const newComment = {
-      author: user.id,
+      author: user._id,
       content: comment,
       postId: id,
     };

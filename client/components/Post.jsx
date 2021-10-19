@@ -1,31 +1,27 @@
-import {
-  ChatAltIcon,
-  ShareIcon,
-  ThumbUpIcon as ThumUpIconOutline,
-} from '@heroicons/react/outline';
-import { ThumbUpIcon as ThumUpIconFilled } from '@heroicons/react/solid';
+import { ChatAltIcon, ShareIcon } from '@heroicons/react/outline';
 import axios from 'axios';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CommentInput from './CommentInput';
 import Comments from './Comments';
+import LikeButton from './LikeButton';
+import Likes from './Likes';
 
 const Post = ({ post }) => {
   const { content, author, createdAt, image: postImage, _id: id, likes } = post;
   const { firstName, lastName, image, _id } = author;
   const state = useSelector((state) => state);
   const { data, loading } = state.user;
-
   const [hasLiked, setHasLiked] = useState(false);
   const [displayComments, setDisplayComments] = useState(false);
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const date = new Date(createdAt).toLocaleString();
-  const numberOfLikes = post.likes.length;
+  const [numberOfLikes, setNumberOfLikes] = useState(post.likes.length);
   const numberOfComments = post.comments.length;
 
   const colorLikeButton = () => {
-    if (likes.includes(data._id)) {
+    if (loading === 'loaded' && likes.includes(data._id)) {
       setHasLiked(true);
     }
   };
@@ -34,9 +30,12 @@ const Post = ({ post }) => {
     try {
       const response = await axios.put(
         `http://localhost:8000/api/posts/${id}/like-post`,
-        { _id: _id, removeLike: hasLiked ? true : false }
+        { _id: _id, removeLike: hasLiked }
       );
-      setHasLiked(!hasLiked);
+
+      const { likes } = response.data;
+      setHasLiked((prev) => !prev);
+      setNumberOfLikes(likes.length);
     } catch (e) {
       console.log(e);
     }
@@ -48,9 +47,12 @@ const Post = ({ post }) => {
 
   useEffect(() => {
     colorLikeButton();
-  }, [hasLiked]);
+  }, [loading]);
 
-  // @WIP add live reloading. currently only displays new posts on refresh
+  // useEffect(() => {
+  //   console.log('useEffect post running');
+  // }, [hasLiked]);
+
   return (
     <div className="flex flex-col">
       <div className="p-5 bg-white mt-5 rounded-t-2xl shadow-xl">
@@ -75,16 +77,7 @@ const Post = ({ post }) => {
         </div>
       )}
       <div className="flex justify-between bg-white shadow-md text-gray-40 p-4">
-        <div className="flex items-center space-x-2">
-          <ThumUpIconFilled className="h-4 text-blue-500" />
-          {numberOfLikes ? (
-            <p className="text-sm text-blue-500 sm:text-base">
-              {numberOfLikes}
-            </p>
-          ) : (
-            ''
-          )}
-        </div>
+        <Likes post={post} numberOfLikes={numberOfLikes} />
         <p
           className="text-xs cursor-pointer hover:underline sm:text-base"
           onClick={() => setDisplayComments((prev) => !prev)}
@@ -97,25 +90,7 @@ const Post = ({ post }) => {
           displayCommentInput || displayComments ? '' : 'rounded-b-2xl'
         }`}
       >
-        <div
-          className="inputIcon rounded-none rounded-bl-2xl"
-          onClick={() => likePost()}
-        >
-          {hasLiked ? (
-            <ThumUpIconFilled className="h-4 text-blue-500" />
-          ) : (
-            <ThumUpIconOutline className="h-4" />
-          )}
-          <p
-            className={
-              hasLiked
-                ? 'text-xs sm:text-base text-blue-500'
-                : 'text-xs sm:text-base'
-            }
-          >
-            Like
-          </p>
-        </div>
+        <LikeButton hasLiked={hasLiked} likePost={likePost} />
         <div
           className="inputIcon rounded-none"
           onClick={() => showCommentInput()}

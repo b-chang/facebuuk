@@ -92,9 +92,11 @@ module.exports = {
       if (req.body.removeLike) {
         post.likes.pull({ _id: req.body._id })
         post.save()
-        return res.json({ message: 'Successfully un-liked' })
+        console.log('removed!')
+        console.log(post)
+        return res.json(post)
       }
-      
+
       const convertIDtoStrings = post.likes.map(id => id.toString())
       const isLiked = convertIDtoStrings.includes(_id)
 
@@ -104,7 +106,7 @@ module.exports = {
 
       post.likes.push(_id)
       await post.save();
-      return res.json({ message: "Successfully liked a post", post });
+      return res.json(post);
     } catch (e) {
       return res.status(400).json(e)
     }
