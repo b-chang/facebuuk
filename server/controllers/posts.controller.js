@@ -1,11 +1,12 @@
 const Post = require('../models/post.model');
 const User = require('../models/user.model');
+const Comment = require('../models/comment.model');
 const jwt_decode = require('jwt-decode');
 
 module.exports = {
   getPosts: async (req, res) => {
     try {
-      const posts = await Post.find().populate('author').sort([['createdAt', 'descending']]);
+      const posts = await Post.find().populate('comments').populate('author').sort([['createdAt', 'descending']]);
       res.json(posts);
     } catch(e) {
       res.status(400).json(e);
@@ -48,17 +49,16 @@ module.exports = {
   },
 
   addCommentToPost: async (req, res) => {
+    const { author: id } = req.body
+    const postId = req.params.id
     try {
-      //placeholder id to seed data
-      const commentor = await User.findOne({_id: "614d6244af0a4e9693e88b06"});
-      const { content } = req.body;
-      const comment = {
-        content,
-        user: commentor
-      }
-      const post = await Post.findOne({_id: req.params.id})
+      const comment = await Comment.create(req.body)
+      const commentor = await User.findOne({_id: id});
+      const post = await Post.findOne({_id: postId})
 
-      post.comments.push(comment);
+      commentor.comments.push(comment._id)
+      commentor.save()
+      post.comments.push(comment._id);
       post.save();
       return res.json({ message: "Successfully added a comment to blog post", post });
     } catch(e) {

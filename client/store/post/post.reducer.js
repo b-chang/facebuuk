@@ -29,7 +29,7 @@ const postsSlice = createSlice({
   initialState: { posts: [], loading: 'idle', error: '' },
   reducers: {},
   extraReducers: (builder) => {
-    // getting all posts
+    // get all posts
     builder.addCase(fetchPosts.pending, (state) => {
       state.posts = [];
       state.loading = "loading";
@@ -50,7 +50,6 @@ const postsSlice = createSlice({
     });
     builder.addCase(
       addPost.fulfilled, (state, { payload }) => {
-        console.warn(payload)
         state.posts.unshift(payload.newPost)
         state.loading = "loaded";
     });

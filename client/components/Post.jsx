@@ -8,13 +8,16 @@ import axios from 'axios';
 import { useSession } from 'next-auth/client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import CommentInput from './CommentInput';
 
 const Post = ({ post }) => {
+  console.log('HELLO', post);
   const { content, author, createdAt, image: postImage, _id: id, likes } = post;
   const { firstName, lastName, image, _id } = author;
   const [session] = useSession();
   const { user } = session;
   const [hasLiked, setHasLiked] = useState(false);
+  const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const date = new Date(createdAt).toLocaleString();
 
   const colorLikeButton = () => {
@@ -33,6 +36,10 @@ const Post = ({ post }) => {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const showCommentInput = () => {
+    setDisplayCommentInput((prev) => !prev);
   };
 
   useEffect(() => {
@@ -63,7 +70,11 @@ const Post = ({ post }) => {
           <Image src={postImage} objectFit="cover" layout="fill" />
         </div>
       )}
-      <div className="flex justify-between items-center rounded-b-2xl bg-white shadow-md text-gray-400 border-t">
+      <div
+        className={`flex justify-between items-center bg-white shadow-md text-gray-400 border-t ${
+          displayCommentInput ? '' : 'rounded-b-2xl'
+        }`}
+      >
         <div
           className="inputIcon rounded-none rounded-bl-2xl"
           onClick={() => likePost()}
@@ -85,13 +96,19 @@ const Post = ({ post }) => {
         </div>
         <div className="inputIcon rounded-none">
           <ChatAltIcon className="h-4" />
-          <p className="text-xs sm:text-base">Comment</p>
+          <p
+            className="text-xs sm:text-base"
+            onClick={() => showCommentInput()}
+          >
+            Comment
+          </p>
         </div>
         <div className="inputIcon rounded-none rounded-br-2xl">
           <ShareIcon className="h-4" />
           <p className="text-xs sm:text-base">Share</p>
         </div>
       </div>
+      {displayCommentInput ? <CommentInput user={user} id={id} /> : ''}
     </div>
   );
 };
