@@ -38,11 +38,24 @@ module.exports = {
     try {
       const { id, content, image } = req.body;
       const newPost = await Post.create({ content, author: id.toString(), image });
-      const user = await User.findOne({ _id: id});
-      user.posts.push(newPost._id);
-      user.save();
+      await User.findByIdAndUpdate(
+        {_id: id},
+        {$push: {"posts": newPost._id}},
+        {safe: true, upsert: true, new: true}
+      );
+
       const post = await Post.findOne({_id: newPost._id}).populate('author')
       return res.json({ message: "Successfully added new post", newPost: post });
+    } catch(e) {
+      return res.status(400).json(e);
+    }
+  },
+
+  getCommentOnPost: async (req, res) => {
+    const postId = req.params.id
+    try {
+      const data = await Post.findOne({ _id: postId }).populate('comments').populate({path: 'comments', populate: { path: 'author', model: 'User' }})
+      return res.json({ message: "Successfully fetched comments on a post", data });
     } catch(e) {
       return res.status(400).json(e);
     }
@@ -53,13 +66,19 @@ module.exports = {
     const postId = req.params.id
     try {
       const comment = await Comment.create(req.body)
-      const commentor = await User.findOne({_id: id});
-      const post = await Post.findOne({_id: postId})
 
-      commentor.comments.push(comment._id)
-      commentor.save()
-      post.comments.push(comment._id);
-      post.save();
+      await User.findByIdAndUpdate(
+        {_id: id},
+        {$push: {"comments": comment._id}},
+        {safe: true, upsert: true, new: true}
+      );
+
+      const post = await Post.findByIdAndUpdate(
+        {_id: postId},
+        {$push: {"comments": comment._id}},
+        {safe: true, upsert: true, new: true}
+      ).populate('comments').populate({path: 'comments', populate: { path: 'author', model: 'User' }})
+
       return res.json({ message: "Successfully added a comment to blog post", post });
     } catch(e) {
       return res.status(400).json(e);

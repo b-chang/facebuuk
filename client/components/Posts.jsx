@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts, selectPosts } from '../store/post/post.reducer';
+import { fetchPosts } from '../store/post/post.reducer';
 import Post from './Post';
 
 const Posts = () => {
-  const { posts, loading } = useSelector(selectPosts);
+  const { allPosts } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -13,8 +13,8 @@ const Posts = () => {
 
   return (
     <div>
-      {loading === 'loaded' &&
-        posts.map((post, idx) => <Post key={idx} post={post} />)}
+      {allPosts.loading === 'loaded' &&
+        allPosts.posts.map((post, idx) => <Post key={idx} post={post} />)}
     </div>
   );
 };

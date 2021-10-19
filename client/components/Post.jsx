@@ -8,8 +8,8 @@ import axios from 'axios';
 import { useSession } from 'next-auth/client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import Comment from './Comment';
 import CommentInput from './CommentInput';
+import Comments from './Comments';
 
 const Post = ({ post }) => {
   const { content, author, createdAt, image: postImage, _id: id, likes } = post;
@@ -135,38 +135,8 @@ const Post = ({ post }) => {
         ''
       )}
       <div className="rounded-b-2xl bg-white shadow-md">
-        {displayComments ? (
-          <>
-            <CommentInput user={user} id={id} />
-            {post.comments.map((comment, idx) => (
-              <Comment
-                key={idx}
-                comment={comment}
-                index={idx}
-                size={post.comments.length}
-              />
-            ))}
-          </>
-        ) : (
-          ''
-        )}
-        {/* {displayComments
-          ? post.comments.map((comment, idx) => (
-              <Comment
-                key={idx}
-                comment={comment}
-                index={idx}
-                size={post.comments.length}
-              />
-            ))
-          : ''} */}
+        {displayComments ? <Comments user={user} id={id} post={post} /> : ''}
       </div>
-      {/* {displayComments
-        ? post.comments.map((comment, idx) => (
-            <Comment key={idx} comment={comment} />
-          ))
-        : ''} */}
-      {/* {displayCommentInput ? <CommentInput user={user} id={id} /> : ''} */}
     </div>
   );
 };

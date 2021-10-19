@@ -1,10 +1,14 @@
 import { combineReducers } from 'redux';
-import { postsReducer, postsSlice } from './post/post.reducer';
+// import { postsSlice } from './post/post.reducer';
+import postReducer from './post/post.reducer';
+// console.log(postReducer)
+// const { reducer: posts } = postsSlice;
+// const { reducer: post } = postsSlice;
+const { postSlice, postsSlice } = postReducer
 
-console.log('checking slice', postsSlice);
-const { reducer: posts } = postsSlice;
-// console.log('checking post from root reducer', postsReducer)
+console.log(postSlice)
+
 export default combineReducers({
-  posts,
-  postsReducer
+  postSlice,
+  postsSlice
 });

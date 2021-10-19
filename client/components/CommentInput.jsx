@@ -1,26 +1,25 @@
-import axios from 'axios';
 import Image from 'next/image';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addComment } from '../store/post/post.reducer';
 
 const CommentInput = (props) => {
   const { user, id } = props;
   const [comment, setComment] = useState('');
+  const dispatch = useDispatch();
 
   const addCommentToPost = async (e) => {
     e.preventDefault();
 
-    const commentor = {
+    const newComment = {
       author: user.id,
       content: comment,
+      postId: id,
     };
 
     // @WIP convert to redux after configuring displaying comments first
     try {
-      const response = await axios.post(
-        `http://localhost:8000/api/posts/${id}/comment`,
-        commentor
-      );
-      console.log(response);
+      dispatch(addComment(newComment));
       setComment('');
     } catch (e) {
       console.log(e);
