@@ -5,18 +5,15 @@ import React, { useEffect, useState } from 'react';
 const Likes = (props) => {
   const { post, numberOfLikes } = props;
   const [likes, setLikes] = useState(post.likes.length);
-  // console.log(post);
 
   const likesOnPost = async () => {
     try {
       const response = await axios.get(
         `http://localhost:8000/api/posts/${post._id}`
       );
-      console.warn(response.data);
       const {
         post: { likes },
       } = response.data;
-      console.log(likes.length);
       setLikes(likes.length);
     } catch (e) {
       console.log(e);

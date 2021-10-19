@@ -92,8 +92,6 @@ module.exports = {
       if (req.body.removeLike) {
         post.likes.pull({ _id: req.body._id })
         post.save()
-        console.log('removed!')
-        console.log(post)
         return res.json(post)
       }
 

@@ -14,8 +14,6 @@ const Comments = (props) => {
     dispatch(fetchComments(id));
   }, []);
 
-  console.log(post.data);
-
   return (
     <div>
       <CommentInput user={user} id={id} />

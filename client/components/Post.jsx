@@ -1,5 +1,6 @@
 import { ChatAltIcon, ShareIcon } from '@heroicons/react/outline';
 import axios from 'axios';
+import { useSession } from 'next-auth/client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -12,6 +13,8 @@ const Post = ({ post }) => {
   const { content, author, createdAt, image: postImage, _id: id, likes } = post;
   const { firstName, lastName, image, _id } = author;
   const state = useSelector((state) => state);
+  const [session] = useSession();
+  const { user: currentUser } = session;
   const { data, loading } = state.user;
   const [hasLiked, setHasLiked] = useState(false);
   const [displayComments, setDisplayComments] = useState(false);
@@ -30,7 +33,7 @@ const Post = ({ post }) => {
     try {
       const response = await axios.put(
         `http://localhost:8000/api/posts/${id}/like-post`,
-        { _id: _id, removeLike: hasLiked }
+        { _id: currentUser.id, removeLike: hasLiked }
       );
 
       const { likes } = response.data;
@@ -48,10 +51,6 @@ const Post = ({ post }) => {
   useEffect(() => {
     colorLikeButton();
   }, [loading]);
-
-  // useEffect(() => {
-  //   console.log('useEffect post running');
-  // }, [hasLiked]);
 
   return (
     <div className="flex flex-col">
