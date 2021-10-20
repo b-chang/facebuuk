@@ -21,7 +21,6 @@ const Likes = (props) => {
   };
 
   useEffect(() => {
-    console.log('likes useEffect is running');
     likesOnPost();
   }, [likes]);
 

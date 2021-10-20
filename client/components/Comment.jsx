@@ -2,13 +2,14 @@ import Image from 'next/image';
 import React from 'react';
 
 const Comment = (props) => {
-  const { comment, index, size } = props;
+  const { comment, index, size, initialComments } = props;
   const { content, author } = comment;
-
   return (
     <div
-      className={`flex flex-col space-x-1 bg-white shadow-md text-gray-400 p-4 ${
-        index === size - 1 ? 'rounded-b-2xl' : ''
+      className={`flex flex-col space-x-1 bg-white text-gray-400 p-4 ${
+        index === size - 1 || index >= initialComments
+          ? 'rounded-b-2xl shadow-md'
+          : ''
       }`}
     >
       <div className="flex items-start space-x-1">

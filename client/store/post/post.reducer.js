@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSelector, createSlice, current } from "@reduxjs/toolkit";
 import axios from 'axios';
 
 const url = 'http://localhost:8000/api/posts'
@@ -109,6 +109,7 @@ export const fetchComments = createAsyncThunk(
 
 export const addComment = createAsyncThunk(
   'posts/addComment', async (comment, thunkAPI) => {
+    console.log('adding a comment', comment)
     try {
       const response = await axios.post(
         `http://localhost:8000/api/posts/${comment.postId}/comment`,
@@ -145,19 +146,22 @@ const postSlice = createSlice({
     });
     // adding a comment
     // @WIP need to fix addCase for adding comment. it breaks build
-    // builder.addCase(addComment.pending, (state) => {
-    //   state.loading = "loading";
-    // });
-    // builder.addCase(
-    //   addComment.fulfilled, (state, { payload }) => {
-    //     state.post = payload.post
-    //     state.loading = "loaded";
-    // });
-    // builder.addCase(
-    //   addComment.rejected,(state, action) => {
-    //     state.loading = "error";
-    //     state.error = action.error.message;
-    // });
+    builder.addCase(addComment.pending, (state) => {
+      state.loading = "loading";
+    });
+    builder.addCase(
+      addComment.fulfilled, (state, { payload }) => {
+        console.warn('trying to add comment', current(state))
+        console.warn('current payload', payload)
+        state.post = payload
+        state.loading = "loaded";
+    });
+    builder.addCase(
+      addComment.rejected,(state, action) => {
+        console.warn('failure occurred', current(state))
+        state.loading = "error";
+        state.error = action.error.message;
+    });
   }
 });
 

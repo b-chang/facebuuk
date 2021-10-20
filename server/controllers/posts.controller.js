@@ -54,8 +54,8 @@ module.exports = {
   getCommentOnPost: async (req, res) => {
     const postId = req.params.id
     try {
-      const data = await Post.findOne({ _id: postId }).populate('comments').populate({path: 'comments', populate: { path: 'author', model: 'User' }})
-      return res.json({ message: "Successfully fetched comments on a post", data });
+      const data = await Post.findOne({ _id: postId }).populate({path: 'comments', options: { sort: { 'createdAt': -1 } }, populate: { path: 'author', model: 'User'}})
+      return res.json(data);
     } catch(e) {
       return res.status(400).json(e);
     }
@@ -79,7 +79,7 @@ module.exports = {
         {safe: true, upsert: true, new: true}
       ).populate('comments').populate({path: 'comments', populate: { path: 'author', model: 'User' }})
 
-      return res.json({ message: "Successfully added a comment to blog post", post });
+      return res.json(post);
     } catch(e) {
       return res.status(400).json(e);
     }
