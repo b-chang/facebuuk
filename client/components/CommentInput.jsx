@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { animated, useSpring } from 'react-spring';
+import { useSpring } from 'react-spring';
 import { addComment } from '../store/post/post.reducer';
 
 const CommentInput = (props) => {
@@ -34,10 +34,7 @@ const CommentInput = (props) => {
   };
 
   return (
-    <animated.div
-      style={fade}
-      className="flex items-center space-x-1 bg-white text-gray-400 p-4 border-t"
-    >
+    <div className="flex items-center space-x-1 bg-white text-gray-400 p-4 border-t">
       <Image
         className="rounded-full"
         src={user.image}
@@ -54,7 +51,7 @@ const CommentInput = (props) => {
           onChange={(e) => setComment(e.target.value)}
         />
       </form>
-    </animated.div>
+    </div>
   );
 };
 

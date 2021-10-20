@@ -31,7 +31,8 @@ export const addPost = createAsyncThunk(
         `http://localhost:8000/api/posts`, post)
       return response.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue({ error: error.message });
+      const { data: { message } } = error.response
+      return thunkAPI.rejectWithValue({ error: message });
     }
 });
 
@@ -65,12 +66,12 @@ const postsSlice = createSlice({
   extraReducers: (builder) => {
     // get all posts
     builder.addCase(fetchPosts.pending, (state) => {
-      state.posts = [];
+      state.data = [];
       state.loading = "loading";
     });
     builder.addCase(
       fetchPosts.fulfilled, (state, { payload }) => {
-        state.posts = payload;
+        state.data = payload;
         state.loading = "loaded";
     });
     builder.addCase(
@@ -84,13 +85,13 @@ const postsSlice = createSlice({
     });
     builder.addCase(
       addPost.fulfilled, (state, { payload }) => {
-        state.posts.unshift(payload.newPost)
+        state.data.unshift(payload.newPost)
         state.loading = "loaded";
     });
     builder.addCase(
       addPost.rejected,(state, action) => {
         state.loading = "error";
-        state.error = action.error.message;
+        state.error = action.payload.error;
     });
   }
 });

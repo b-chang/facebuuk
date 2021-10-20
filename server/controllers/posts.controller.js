@@ -35,9 +35,16 @@ module.exports = {
   },
 
   addPost: async (req, res) => {
+    console.log('checking')
     try {
       const { id, content, image } = req.body;
+
+      if(!content) {
+        return res.status(400).json({ message: "New post cannot be empty." });
+      }
       const newPost = await Post.create({ content, author: id.toString(), image });
+
+
       await User.findByIdAndUpdate(
         {_id: id},
         {$push: {"posts": newPost._id}},

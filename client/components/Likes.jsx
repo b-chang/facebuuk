@@ -1,28 +1,11 @@
 import { ThumbUpIcon as ThumUpIconFilled } from '@heroicons/react/solid';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 const Likes = (props) => {
   const { post, numberOfLikes } = props;
   const [likes, setLikes] = useState(post.likes.length);
 
-  const likesOnPost = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/posts/${post._id}`
-      );
-      const {
-        post: { likes },
-      } = response.data;
-      setLikes(likes.length);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    likesOnPost();
-  }, [likes]);
+  useEffect(() => {}, [likes]);
 
   return (
     <div className="flex items-center space-x-2">

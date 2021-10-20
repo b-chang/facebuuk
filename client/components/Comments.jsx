@@ -27,33 +27,35 @@ const Comments = (props) => {
   };
 
   return (
-    <animated.div style={fade}>
+    <>
       <CommentInput user={user} id={id} />
-      {loading === 'loaded' &&
-        post.comments.map((comment, idx) => {
-          if (idx < displayComments) {
-            return (
-              <Comment
-                key={idx}
-                comment={comment}
-                index={idx}
-                displayComments={displayComments}
-                size={post.comments.length}
-              />
-            );
-          }
-        })}
-      {loading === 'loaded' && displayComments < post.comments.length ? (
-        <p
-          onClick={() => displayMoreComments()}
-          className="hover:underline cursor-pointer p-3"
-        >
-          View more comments
-        </p>
-      ) : (
-        ''
-      )}
-    </animated.div>
+      <animated.div style={fade}>
+        {loading === 'loaded' &&
+          post.comments.map((comment, idx) => {
+            if (idx < displayComments) {
+              return (
+                <Comment
+                  key={idx}
+                  comment={comment}
+                  index={idx}
+                  displayComments={displayComments}
+                  size={post.comments.length}
+                />
+              );
+            }
+          })}
+        {loading === 'loaded' && displayComments < post.comments.length ? (
+          <p
+            onClick={() => displayMoreComments()}
+            className="hover:underline cursor-pointer p-3"
+          >
+            View more comments
+          </p>
+        ) : (
+          ''
+        )}
+      </animated.div>
+    </>
   );
 };
 
