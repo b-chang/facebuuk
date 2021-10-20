@@ -77,7 +77,7 @@ module.exports = {
         {_id: postId},
         {$push: {"comments": comment._id}},
         {safe: true, upsert: true, new: true}
-      ).populate('comments').populate({path: 'comments', populate: { path: 'author', model: 'User' }})
+      ).populate({path: 'comments', options: { sort: { 'createdAt': -1 } }, populate: { path: 'author', model: 'User'}})
 
       return res.json(post);
     } catch(e) {

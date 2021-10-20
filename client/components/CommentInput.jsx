@@ -1,12 +1,19 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { animated, useSpring } from 'react-spring';
 import { addComment } from '../store/post/post.reducer';
 
 const CommentInput = (props) => {
   const { user, id } = props;
   const [comment, setComment] = useState('');
   const dispatch = useDispatch();
+  const fade = useSpring({
+    from: {
+      opacity: 0,
+    },
+    to: { opacity: 1 },
+  });
 
   const addCommentToPost = async (e) => {
     e.preventDefault();
@@ -27,7 +34,10 @@ const CommentInput = (props) => {
   };
 
   return (
-    <div className="flex items-center space-x-1 bg-white shadow-md text-gray-400 p-4 border-t">
+    <animated.div
+      style={fade}
+      className="flex items-center space-x-1 bg-white text-gray-400 p-4 border-t"
+    >
       <Image
         className="rounded-full"
         src={user.image}
@@ -44,7 +54,7 @@ const CommentInput = (props) => {
           onChange={(e) => setComment(e.target.value)}
         />
       </form>
-    </div>
+    </animated.div>
   );
 };
 

@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import CommentInput from './CommentInput';
+import { animated, useSpring } from 'react-spring';
 import Comments from './Comments';
 import LikeButton from './LikeButton';
 import Likes from './Likes';
@@ -18,10 +18,15 @@ const Post = ({ post }) => {
   const { data, loading } = state.user;
   const [hasLiked, setHasLiked] = useState(false);
   const [displayComments, setDisplayComments] = useState(false);
-  const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const date = new Date(createdAt).toLocaleString();
   const [numberOfLikes, setNumberOfLikes] = useState(post.likes.length);
   const numberOfComments = post.comments.length;
+  const fade = useSpring({
+    from: {
+      opacity: 0,
+    },
+    to: { opacity: 1 },
+  });
 
   const colorLikeButton = () => {
     if (loading === 'loaded' && likes.includes(data._id)) {
@@ -44,16 +49,12 @@ const Post = ({ post }) => {
     }
   };
 
-  const showCommentInput = () => {
-    setDisplayCommentInput((prev) => !prev);
-  };
-
   useEffect(() => {
     colorLikeButton();
   }, [loading]);
 
   return (
-    <div className="flex flex-col">
+    <animated.div className="flex flex-col" style={fade}>
       <div className="p-5 bg-white mt-5 rounded-t-2xl shadow-xl">
         <div className="flex space-x-2">
           <img
@@ -86,13 +87,13 @@ const Post = ({ post }) => {
       </div>
       <div
         className={`flex justify-between items-center bg-white shadow-md text-gray-400 border-t ${
-          displayCommentInput || displayComments ? '' : 'rounded-b-2xl'
+          displayComments ? '' : 'rounded-b-2xl'
         }`}
       >
         <LikeButton hasLiked={hasLiked} likePost={likePost} />
         <div
           className="inputIcon rounded-none"
-          onClick={() => showCommentInput()}
+          onClick={() => setDisplayComments((prev) => !prev)}
         >
           <ChatAltIcon className="h-4" />
           <p className="text-xs sm:text-base">Comment</p>
@@ -102,15 +103,10 @@ const Post = ({ post }) => {
           <p className="text-xs sm:text-base">Share</p>
         </div>
       </div>
-      {displayCommentInput && !displayComments ? (
-        <CommentInput user={data} id={id} />
-      ) : (
-        ''
-      )}
       <div className="rounded-b-2xl bg-white shadow-md">
         {displayComments ? <Comments user={data} id={id} post={post} /> : ''}
       </div>
-    </div>
+    </animated.div>
   );
 };
 

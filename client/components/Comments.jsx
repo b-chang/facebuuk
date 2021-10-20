@@ -1,43 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { animated, useSpring } from 'react-spring';
 import { fetchComments } from '../store/post/post.reducer';
 import Comment from './Comment';
 import CommentInput from './CommentInput';
 
 const Comments = (props) => {
   const { user, id } = props;
-  const state = useSelector((state) => state);
   const { singlePost } = useSelector((state) => state);
-  const [initialComments, setInitialComments] = useState(5);
+  const [displayComments, setDisplayComments] = useState(2);
   const dispatch = useDispatch();
   const { loading, post } = singlePost;
+  const fade = useSpring({
+    from: {
+      opacity: 0,
+    },
+    to: { opacity: 1 },
+  });
 
   useEffect(() => {
     dispatch(fetchComments(id));
-  }, [initialComments]);
+  }, [displayComments]);
 
   const displayMoreComments = () => {
-    setInitialComments((prev) => prev + 3);
+    setDisplayComments((prev) => prev + 3);
   };
 
   return (
-    <div>
+    <animated.div style={fade}>
       <CommentInput user={user} id={id} />
       {loading === 'loaded' &&
         post.comments.map((comment, idx) => {
-          if (idx < initialComments) {
+          if (idx < displayComments) {
             return (
               <Comment
                 key={idx}
                 comment={comment}
                 index={idx}
-                initialComments={initialComments}
+                displayComments={displayComments}
                 size={post.comments.length}
               />
             );
           }
         })}
-      {loading === 'loaded' && initialComments < post.comments.length ? (
+      {loading === 'loaded' && displayComments < post.comments.length ? (
         <p
           onClick={() => displayMoreComments()}
           className="hover:underline cursor-pointer p-3"
@@ -47,7 +53,7 @@ const Comments = (props) => {
       ) : (
         ''
       )}
-    </div>
+    </animated.div>
   );
 };
 
