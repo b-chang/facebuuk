@@ -54,7 +54,10 @@ const Post = ({ post }) => {
   }, [loading]);
 
   return (
-    <animated.div className="flex flex-col" style={fade}>
+    <animated.div
+      className="flex flex-col my-3 shadow-md rounded-2xl"
+      style={fade}
+    >
       <div className="p-5 bg-white mt-5 rounded-t-2xl shadow-xl">
         <div className="flex space-x-2">
           <img

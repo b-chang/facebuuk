@@ -35,7 +35,6 @@ module.exports = {
   },
 
   addPost: async (req, res) => {
-    console.log('checking')
     try {
       const { id, content, image } = req.body;
 
