@@ -1,21 +1,21 @@
 import { ThumbUpIcon } from '@heroicons/react/solid';
 import axios from 'axios';
-import { useSession } from 'next-auth/client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import CommentInput from './CommentInput';
 
 const Comment = (props) => {
   const { comment, index, size, displayComments } = props;
-  const { content, author, createdAt } = comment;
-  const [hasLiked, setHasLiked] = useState(false);
-  const [session] = useSession();
-  const date = new Date(createdAt).toLocaleString();
-  const { user } = session;
-  const [numberOfLikes, setNumberOfLikes] = useState(comment.likes.length);
 
-  console.log(numberOfLikes);
+  const { content, author, createdAt, _id } = comment;
+  const [hasLiked, setHasLiked] = useState(false);
+  const [showCommentReplyBox, setShowCommentReplyBox] = useState(false);
+  const { user, comment: newComment } = useSelector((state) => state);
+  const date = new Date(createdAt).toLocaleString();
+  const [numberOfLikes, setNumberOfLikes] = useState(comment.likes.length);
   const colorLikeButton = () => {
-    if (comment.likes.includes(user.id)) {
+    if (comment.likes.includes(user.data._id)) {
       setHasLiked(true);
     }
   };
@@ -24,7 +24,7 @@ const Comment = (props) => {
     try {
       const response = await axios.put(
         `http://localhost:8000/api/post/comment/${id}/like-comment`,
-        { userId: user.id, removeLike: hasLiked }
+        { userId: user.data._id, removeLike: hasLiked }
       );
       const { likes } = response.data;
       setHasLiked((prev) => !prev);
@@ -78,8 +78,19 @@ const Comment = (props) => {
             >
               Like
             </span>
+            <span
+              className="ml-1 text-xs hover:underline hover:cursor-pointer"
+              onClick={() => setShowCommentReplyBox((prev) => !prev)}
+            >
+              Reply
+            </span>
             <p className="text-xs">{date}</p>
           </div>
+          {showCommentReplyBox ? (
+            <CommentInput user={user.data} id={_id} reply={true} />
+          ) : (
+            ''
+          )}
         </div>
       </div>
     </div>

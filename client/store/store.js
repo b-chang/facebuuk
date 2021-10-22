@@ -3,7 +3,7 @@ import { applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import postReducer from './post/post.reducer';
 
-const { postsSlice, postSlice, commentsSlice, userSlice } = postReducer
+const { postsSlice, postSlice, commentSlice, commentsSlice, userSlice } = postReducer
 
 // workaround because nextjs is Server Side Rendering (SSR) and does not know about the window
 let composeReduxDevTools = compose;
@@ -19,6 +19,7 @@ const store = configureStore({
     singlePost: postSlice.reducer,
     allPosts: postsSlice.reducer,
     user: userSlice.reducer,
+    comment: commentSlice.reducer,
     commentsOnPost: commentsSlice.reducer
   }
 })

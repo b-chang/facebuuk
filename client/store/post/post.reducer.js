@@ -98,7 +98,7 @@ export const addComment = createAsyncThunk(
   'posts/addComment', async (comment, thunkAPI) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/posts/${comment.postId}/comment`,
+        `http://localhost:8000/api/posts/${comment.id}/comment`,
         {
           author: comment.author,
           content: comment.content
@@ -113,7 +113,6 @@ export const addComment = createAsyncThunk(
 export const fetchPost = createAsyncThunk(
   'posts/fetchPost', async (id, thunkAPI) => {
     try {
-      console.log('fetching a post')
       const response = await axios.get(`http://localhost:8000/api/posts/${id}`);
       return response.data;
     } catch (error) {
@@ -153,6 +152,38 @@ const postSlice = createSlice({
       fetchPost.rejected,(state, action) => {
         state.loading = "error";
         state.error = action.payload.error;
+    });
+  }
+});
+
+export const replyToComment = createAsyncThunk(
+  'comment/replyToComment', async (comment, thunkAPI) => {
+    try {
+      const response = await axios.put(`http://localhost:8000/api/post/comment/reply/${comment.id}`, comment);
+      return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue({ error: error.message });
+    }
+});
+
+const commentSlice = createSlice({
+  name: 'comment',
+  initialState: { comment: {}, loading: 'idle', error: '' },
+  reducers: {},
+  extraReducers: (builder) => {
+    // adding a comment
+    builder.addCase(replyToComment.pending, (state) => {
+      state.loading = "loading";
+    });
+    builder.addCase(
+      replyToComment.fulfilled, (state, { payload }) => {
+        state.comment = payload
+        state.loading = "loaded";
+    });
+    builder.addCase(
+      replyToComment.rejected,(state, action) => {
+        state.loading = "error";
+        state.error = action.error.message;
     });
   }
 });
@@ -201,4 +232,4 @@ export const selectPosts = createSelector(
   }), (state) =>  state
 );
 
-export default { postsSlice, postSlice, userSlice, commentsSlice, selectPosts };
+export default { postsSlice, postSlice, userSlice, commentSlice, commentsSlice, selectPosts };

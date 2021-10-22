@@ -2,10 +2,11 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSpring } from 'react-spring';
-import { addComment } from '../store/post/post.reducer';
+import { addComment, replyToComment } from '../store/post/post.reducer';
 
 const CommentInput = (props) => {
-  const { user, id } = props;
+  const { user, id, reply } = props;
+
   const [comment, setComment] = useState('');
   const dispatch = useDispatch();
   const fade = useSpring({
@@ -21,12 +22,17 @@ const CommentInput = (props) => {
     const newComment = {
       author: user._id,
       content: comment,
-      postId: id,
+      id: id,
     };
 
     try {
-      dispatch(addComment(newComment));
-      setComment('');
+      if (reply) {
+        dispatch(replyToComment(newComment));
+        setComment('');
+      } else {
+        dispatch(addComment(newComment));
+        setComment('');
+      }
     } catch (e) {
       console.log(e);
     }

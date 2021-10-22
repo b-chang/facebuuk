@@ -139,5 +139,30 @@ module.exports = {
     } catch (e) {
       return res.status(400).json(e)
     }
+  },
+
+  replyToComment: async (req, res) => {
+    const { author, content } = req.body
+    try {
+      const reply = await Comment.create(req.body)
+
+      await User.findByIdAndUpdate(
+        {_id: author},
+        {$push: {"comments": reply._id}},
+        {safe: true, upsert: true, new: true}
+      );
+
+      await Comment.findByIdAndUpdate(
+        {_id: req.params.id},
+        {$push: {"comments": reply._id}},
+        {safe: true, upsert: true, new: true}
+      );
+      
+      const commentId = reply._id.toString()
+      const newReply = await Comment.findOne({ _id: commentId }).populate('author')
+      return res.json(newReply);
+    } catch(e) {
+      return res.status(400).json(e);
+    }
   }
 }
