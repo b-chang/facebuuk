@@ -29,7 +29,6 @@ export const addPost = createAsyncThunk(
     try {
       const response = await axios.post(
         `http://localhost:8000/api/posts`, post)
-      // console.warn(response)
       return response.data;
     } catch (error) {
       const { data: { message } } = error.response
@@ -97,7 +96,6 @@ export const fetchComments = createAsyncThunk(
 
 export const addComment = createAsyncThunk(
   'posts/addComment', async (comment, thunkAPI) => {
-    console.log('adding a comment', comment)
     try {
       const response = await axios.post(
         `http://localhost:8000/api/posts/${comment.postId}/comment`,
@@ -106,6 +104,17 @@ export const addComment = createAsyncThunk(
           content: comment.content
         }
       );
+      return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue({ error: error.message });
+    }
+});
+
+export const fetchPost = createAsyncThunk(
+  'posts/fetchPost', async (id, thunkAPI) => {
+    try {
+      console.log('fetching a post')
+      const response = await axios.get(`http://localhost:8000/api/posts/${id}`);
       return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue({ error: error.message });
@@ -131,14 +140,36 @@ const postSlice = createSlice({
         state.loading = "error";
         state.error = action.payload.error;
     });
+    // fetch a post
+    builder.addCase(fetchPost.pending, (state) => {
+      state.loading = "loading";
+    });
+    builder.addCase(
+      fetchPost.fulfilled, (state, { payload }) => {
+        state.post = payload.post
+        state.loading = "loaded";
+    });
+    builder.addCase(
+      fetchPost.rejected,(state, action) => {
+        state.loading = "error";
+        state.error = action.payload.error;
+    });
+  }
+});
+
+const commentsSlice = createSlice({
+  name: 'comments',
+  initialState: { comments: [], loading: 'idle', error: '' },
+  reducers: {},
+  extraReducers: (builder) => {
     // get all comments on a post
     builder.addCase(fetchComments.pending, (state) => {
-      state.post = {};
+      state.comments = {};
       state.loading = "loading";
     });
     builder.addCase(
       fetchComments.fulfilled, (state, { payload }) => {
-        state.post = payload;
+        state.comments = payload.comments;
         state.loading = "loaded";
     });
     builder.addCase(
@@ -147,13 +178,12 @@ const postSlice = createSlice({
         state.error = action.error.message;
     });
     // adding a comment
-    // @WIP need to fix addCase for adding comment. it breaks build
     builder.addCase(addComment.pending, (state) => {
       state.loading = "loading";
     });
     builder.addCase(
       addComment.fulfilled, (state, { payload }) => {
-        state.post = payload
+        state.comments.unshift(payload)
         state.loading = "loaded";
     });
     builder.addCase(
@@ -171,4 +201,4 @@ export const selectPosts = createSelector(
   }), (state) =>  state
 );
 
-export default { postsSlice, postSlice, userSlice, selectPosts };
+export default { postsSlice, postSlice, userSlice, commentsSlice, selectPosts };

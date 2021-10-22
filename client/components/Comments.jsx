@@ -7,10 +7,10 @@ import CommentInput from './CommentInput';
 
 const Comments = (props) => {
   const { user, id } = props;
-  const { singlePost } = useSelector((state) => state);
+  const { commentsOnPost } = useSelector((state) => state);
   const [displayComments, setDisplayComments] = useState(2);
   const dispatch = useDispatch();
-  const { loading, post } = singlePost;
+  const { loading, comments } = commentsOnPost;
   const fade = useSpring({
     from: {
       opacity: 0,
@@ -31,7 +31,7 @@ const Comments = (props) => {
       <CommentInput user={user} id={id} />
       <animated.div style={fade}>
         {loading === 'loaded' &&
-          post.comments.map((comment, idx) => {
+          comments.map((comment, idx) => {
             if (idx < displayComments) {
               return (
                 <Comment
@@ -39,12 +39,12 @@ const Comments = (props) => {
                   comment={comment}
                   index={idx}
                   displayComments={displayComments}
-                  size={post.comments.length}
+                  size={commentsOnPost.comments.length}
                 />
               );
             }
           })}
-        {loading === 'loaded' && displayComments < post.comments.length ? (
+        {loading === 'loaded' && displayComments < comments.length ? (
           <p
             onClick={() => displayMoreComments()}
             className="hover:underline cursor-pointer p-3"

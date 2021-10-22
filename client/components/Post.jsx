@@ -85,6 +85,7 @@ const Post = ({ post }) => {
           className="text-xs cursor-pointer hover:underline sm:text-base"
           onClick={() => setDisplayComments((prev) => !prev)}
         >
+          {/* this is where the comments are . */}
           {numberOfComments ? numberOfComments : null} comments
         </p>
       </div>

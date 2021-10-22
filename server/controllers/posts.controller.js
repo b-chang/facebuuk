@@ -71,21 +71,20 @@ module.exports = {
     const { author: id } = req.body
     const postId = req.params.id
     try {
-      const comment = await Comment.create(req.body)
-
+      const newComment = await Comment.create(req.body)
       await User.findByIdAndUpdate(
         {_id: id},
-        {$push: {"comments": comment._id}},
+        {$push: {"comments": newComment._id}},
         {safe: true, upsert: true, new: true}
       );
-
-      const post = await Post.findByIdAndUpdate(
+      await Post.findByIdAndUpdate(
         {_id: postId},
-        {$push: {"comments": comment._id}},
+        {$push: {"comments": newComment._id}},
         {safe: true, upsert: true, new: true}
       ).populate({path: 'comments', options: { sort: { 'createdAt': -1 } }, populate: { path: 'author', model: 'User'}})
+      const comment = await Comment.findOne({ _id: newComment._id.toString() }).populate('author')
 
-      return res.json(post);
+      return res.json(comment);
     } catch(e) {
       return res.status(400).json(e);
     }
