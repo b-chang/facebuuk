@@ -113,5 +113,31 @@ module.exports = {
     } catch (e) {
       return res.status(400).json(e)
     }
+  },
+
+  likeComment: async (req, res) => {
+    try {
+      const { userId } = req.body
+      const comment = await Comment.findOne({ _id: req.params.id })
+
+      if (req.body.removeLike) {
+        comment.likes.pull({ _id: userId })
+        comment.save()
+        return res.json(comment)
+      }
+
+      const convertIDtoStrings = comment.likes.map(id => id.toString())
+      const isLiked = convertIDtoStrings.includes(userId)
+      
+      if (isLiked) {
+        return res.json({ message: 'You have already liked this post!' })
+      }
+
+      comment.likes.push(userId)
+      await comment.save();
+      return res.json(comment);
+    } catch (e) {
+      return res.status(400).json(e)
+    }
   }
 }

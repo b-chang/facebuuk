@@ -12,4 +12,5 @@ module.exports = (app) => {
   app.get('/api/posts/:id/comment', PostsControllers.getCommentOnPost)  
   app.post('/api/posts/:id/comment', PostsControllers.addCommentToPost)
   app.put('/api/posts/:id/like-post', PostsControllers.likePost)  
+  app.put('/api/post/comment/:id/like-comment', PostsControllers.likeComment)
 }
