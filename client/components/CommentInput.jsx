@@ -24,7 +24,6 @@ const CommentInput = (props) => {
       postId: id,
     };
 
-    // @WIP convert to redux after configuring displaying comments first
     try {
       dispatch(addComment(newComment));
       setComment('');
@@ -44,7 +43,7 @@ const CommentInput = (props) => {
       />
       <form className="flex flex-1" onSubmit={(e) => addCommentToPost(e)}>
         <input
-          className="rounded-full h-12 bg-gray-100 flex-grow px-5 focus:outline-none w-full"
+          className="rounded-xl h-12 bg-gray-100 flex-grow px-5 mr-3 focus:outline-none w-full"
           type="text"
           placeholder="Write a comment..."
           value={comment}

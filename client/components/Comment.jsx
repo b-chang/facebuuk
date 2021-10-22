@@ -1,3 +1,4 @@
+import { ThumbUpIcon } from '@heroicons/react/solid';
 import axios from 'axios';
 import { useSession } from 'next-auth/client';
 import Image from 'next/image';
@@ -12,6 +13,7 @@ const Comment = (props) => {
   const { user } = session;
   const [numberOfLikes, setNumberOfLikes] = useState(comment.likes.length);
 
+  console.log(numberOfLikes);
   const colorLikeButton = () => {
     if (comment.likes.includes(user.id)) {
       setHasLiked(true);
@@ -53,14 +55,21 @@ const Comment = (props) => {
           layout="fixed"
         />
         <div className="flex flex-col flex-grow">
-          <div className="rounded-lg h-12 bg-gray-100 flex-grow px-3 focus:outline-none">
-            <p>
+          <div className="rounded-lg bg-gray-100 flex-grow px-3 focus:outline-none max-h-52 max-w-xl overflow-y-auto scrollbar-hide">
+            <p className="font-bold">
               {author.firstName} {author.lastName}
             </p>
-            <p>{content}</p>
+            <div className="relative">
+              <p>{content}</p>
+              {numberOfLikes > 0 && (
+                <div className="absolute right-1 inset-y-0 top-4 flex items-center justify-center rounded-lg h-6 w-10 bg-gray-200 text-blue-500">
+                  <ThumbUpIcon className="h-4 text-blue-500" />
+                  {numberOfLikes}
+                </div>
+              )}
+            </div>
           </div>
           <div className="flex items-center space-x-2">
-            {/* <LikeButton hasLiked={hasLiked} /> */}
             <span
               className={`ml-1 text-xs hover:underline hover:cursor-pointer ${
                 hasLiked ? 'text-blue-500' : ''
