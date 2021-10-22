@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSelector, createSlice, current } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
 
 const url = 'http://localhost:8000/api/posts'
@@ -17,7 +17,7 @@ export const fetchUser = createAsyncThunk(
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts', async (_, thunkAPI) => {
     try {
-      const response = await axios.get(url);//where you want to fetch data
+      const response = await axios.get(url);
       return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue({ error: error.message });
@@ -29,6 +29,7 @@ export const addPost = createAsyncThunk(
     try {
       const response = await axios.post(
         `http://localhost:8000/api/posts`, post)
+      // console.warn(response)
       return response.data;
     } catch (error) {
       const { data: { message } } = error.response
@@ -79,20 +80,6 @@ const postsSlice = createSlice({
         state.loading = "error";
         state.error = action.error.message;
     });
-    // adding a post
-    builder.addCase(addPost.pending, (state) => {
-      state.loading = "loading";
-    });
-    builder.addCase(
-      addPost.fulfilled, (state, { payload }) => {
-        state.data.unshift(payload.newPost)
-        state.loading = "loaded";
-    });
-    builder.addCase(
-      addPost.rejected,(state, action) => {
-        state.loading = "error";
-        state.error = action.payload.error;
-    });
   }
 });
 
@@ -130,6 +117,20 @@ const postSlice = createSlice({
   initialState: { post: {}, loading: 'idle', error: '' },
   reducers: {},
   extraReducers: (builder) => {
+    // add a post
+    builder.addCase(addPost.pending, (state) => {
+      state.loading = "loading";
+    });
+    builder.addCase(
+      addPost.fulfilled, (state, { payload }) => {
+        state.post = payload.newPost
+        state.loading = "loaded";
+    });
+    builder.addCase(
+      addPost.rejected,(state, action) => {
+        state.loading = "error";
+        state.error = action.payload.error;
+    });
     // get all comments on a post
     builder.addCase(fetchComments.pending, (state) => {
       state.post = {};
@@ -152,14 +153,11 @@ const postSlice = createSlice({
     });
     builder.addCase(
       addComment.fulfilled, (state, { payload }) => {
-        console.warn('trying to add comment', current(state))
-        console.warn('current payload', payload)
         state.post = payload
         state.loading = "loaded";
     });
     builder.addCase(
       addComment.rejected,(state, action) => {
-        console.warn('failure occurred', current(state))
         state.loading = "error";
         state.error = action.error.message;
     });
@@ -172,12 +170,5 @@ export const selectPosts = createSelector(
     loading: state.loading,
   }), (state) =>  state
 );
-
-// export const selectComments = createSelector(
-//   (state) => ({
-//     data: state.posts,d
-//     loading: state.loading,
-//   }), (state) =>  state
-// );
 
 export default { postsSlice, postSlice, userSlice, selectPosts };

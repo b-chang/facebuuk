@@ -1,16 +1,26 @@
 import axios from 'axios';
 import { signIn } from 'next-auth/client';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import FORM_TYPE from './form-type';
 
 const Form = (props) => {
   const { loginType, btnText } = props;
   const { initialState, inputs } = FORM_TYPE[loginType];
   const [user, setUser] = useState({ ...initialState });
+  const [message, setMessage] = useState('');
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query.error) {
+      setMessage(router.query.error);
+    }
+  }, [router]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    let redirect = false;
 
     if (loginType === 'SIGN_UP') {
       try {
@@ -18,19 +28,25 @@ const Form = (props) => {
           'http://localhost:8000/api/signup',
           user
         );
-        console.log(response);
+        redirect = true;
       } catch (e) {
-        console.log(e);
+        const { data } = e.response;
+        setMessage(data.message);
+        setTimeout(() => {
+          setMessage('');
+        }, 3000);
+        return e.response;
       }
     }
 
-    signIn('credentials', {
+    const response = await signIn('credentials', {
       ...user,
-      // redirect: false,
-      // The page where you want to redirect to after a
-      // successful login
+      redirect: false,
       callbackUrl: `${window.location.origin}/`,
     });
+
+    if (response.url) router.push(response.url);
+    if (response.error) setMessage(response.error);
   };
 
   const handleChange = (e) => {
@@ -43,7 +59,7 @@ const Form = (props) => {
   };
 
   return (
-    <div className="bg-white items-center p-2 shadow-md lg:px-5 lg:w-3/12 md:w-6/12">
+    <div className="bg-white items-center p-2 shadow-md lg:px-5 lg:w-4/12 md:w-6/12">
       <form onSubmit={handleLogin}>
         {inputs.map((inputField, idx) => (
           <div key={idx}>
@@ -76,6 +92,7 @@ const Form = (props) => {
           </Link>
         </button>
       </div>
+      {message ? <p>{message}</p> : ''}
     </div>
   );
 };

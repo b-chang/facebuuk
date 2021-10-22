@@ -5,17 +5,16 @@ import { fetchPosts } from '../store/post/post.reducer';
 import Post from './Post';
 
 const Posts = () => {
-  const { allPosts } = useSelector((state) => state);
+  const { allPosts, singlePost } = useSelector((state) => state);
   const dispatch = useDispatch();
   const [displayPosts, setDisplayPosts] = useState(3);
-
   const displayMorePosts = (n = 5) => {
     setDisplayPosts((prev) => prev + 5);
   };
 
   useEffect(() => {
     dispatch(fetchPosts());
-  }, []);
+  }, [singlePost.loading]);
 
   return (
     <div>
@@ -26,12 +25,10 @@ const Posts = () => {
           next={() => displayMorePosts()}
           hasMore={true}
         >
-          {allPosts.loading === 'loaded' &&
-            allPosts.data.map((post, idx) => {
-              if (idx < displayPosts) {
-                return <Post key={idx} post={post} />;
-              }
-            })}
+          <div>
+            {allPosts.loading === 'loaded' &&
+              allPosts.data.map((post, idx) => <Post key={idx} post={post} />)}
+          </div>
         </InfiniteScroll>
       )}
     </div>
@@ -39,8 +36,3 @@ const Posts = () => {
 };
 
 export default Posts;
-
-// <div>
-//   {allPosts.loading === 'loaded' &&
-//     allPosts.data.map((post, idx) => <Post key={idx} post={post} />)}
-// </div>

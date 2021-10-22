@@ -20,9 +20,6 @@ const providers = [
         })
 
         const id = jwt_decode(response.headers['set-cookie'][0])
-        const { data } = response.config
-        // get rid of image
-        // do it one time on the feed page and store it in global store
         const { name } = response.data.user
         const user = {
           ...id,
@@ -34,7 +31,7 @@ const providers = [
       } catch (e) {
         const errorMessage = e.response.data.message
         // Redirecting to the login page with error message in the URL
-        throw new Error(errorMessage + '&email=' + credentials.email)
+        throw new Error(errorMessage)
       }
 
     }

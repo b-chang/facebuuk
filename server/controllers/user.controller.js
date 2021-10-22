@@ -92,7 +92,7 @@ module.exports = {
       .cookie("usertoken", userToken, secret, {
         httpOnly: true
       })
-      .json({ message: "Successful login!", accessToken: userToken, user: {name, image: user.image} });
+      .json({ message: "Successful login!", accessToken: userToken, user: {name, email: user.email} });
   },
 
   logout: async (req, res) => {
