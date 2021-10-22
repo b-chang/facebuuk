@@ -59,7 +59,7 @@ const Form = (props) => {
   };
 
   return (
-    <div className="bg-white items-center p-2 shadow-md lg:px-5 lg:w-4/12 md:w-6/12">
+    <div className="bg-white w-full items-center p-2 shadow-md lg:px-5 lg:w-4/12 md:w-full">
       <form onSubmit={handleLogin}>
         {inputs.map((inputField, idx) => (
           <div key={idx}>
@@ -83,9 +83,9 @@ const Form = (props) => {
         </button>
       </form>
       <div className="flex flex-col">
-        <a className="flex justify-center pt-3 pb-5 border-b-2">
+        {/* <a className="flex justify-center pt-3 pb-5 border-b-2">
           Forgot Password?
-        </a>
+        </a> */}
         <button className="bg-green-600 text-white rounded-md p-3 max-w-xs m-auto mt-8 mb-3">
           <Link href={loginType === 'LOGIN' ? '/signup' : '/login'}>
             {loginType === 'LOGIN' ? 'Create New Account' : 'Have an account?'}
