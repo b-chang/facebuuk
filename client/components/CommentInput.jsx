@@ -5,8 +5,7 @@ import { useSpring } from 'react-spring';
 import { addComment, replyToComment } from '../store/post/post.reducer';
 
 const CommentInput = (props) => {
-  const { user, id, reply } = props;
-
+  const { user, id, reply, setCommentAdded } = props;
   const [comment, setComment] = useState('');
   const dispatch = useDispatch();
   const fade = useSpring({
@@ -29,6 +28,7 @@ const CommentInput = (props) => {
       if (reply) {
         dispatch(replyToComment(newComment));
         setComment('');
+        setCommentAdded(true);
       } else {
         dispatch(addComment(newComment));
         setComment('');

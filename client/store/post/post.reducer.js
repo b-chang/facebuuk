@@ -43,13 +43,13 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     // get all posts
     builder.addCase(fetchUser.pending, (state) => {
-      state.data = {};
       state.loading = "loading";
+      state.data = {};
     });
     builder.addCase(
       fetchUser.fulfilled, (state, { payload }) => {
-        state.data = payload;
         state.loading = "loaded";
+        state.data = payload;
     });
     builder.addCase(
       fetchUser.rejected,(state, action) => {
@@ -66,13 +66,13 @@ const postsSlice = createSlice({
   extraReducers: (builder) => {
     // get all posts
     builder.addCase(fetchPosts.pending, (state) => {
-      state.data = [];
       state.loading = "loading";
-    });
+      state.data = [];
+    }); 
     builder.addCase(
       fetchPosts.fulfilled, (state, { payload }) => {
-        state.data = payload;
         state.loading = "loaded";
+        state.data = payload;
     });
     builder.addCase(
       fetchPosts.rejected,(state, action) => {
@@ -131,8 +131,8 @@ const postSlice = createSlice({
     });
     builder.addCase(
       addPost.fulfilled, (state, { payload }) => {
-        state.post = payload.newPost
         state.loading = "loaded";
+        state.post = payload.newPost
     });
     builder.addCase(
       addPost.rejected,(state, action) => {
@@ -145,8 +145,8 @@ const postSlice = createSlice({
     });
     builder.addCase(
       fetchPost.fulfilled, (state, { payload }) => {
-        state.post = payload.post
         state.loading = "loaded";
+        state.post = payload.post
     });
     builder.addCase(
       fetchPost.rejected,(state, action) => {
@@ -177,8 +177,8 @@ const commentSlice = createSlice({
     });
     builder.addCase(
       replyToComment.fulfilled, (state, { payload }) => {
-        state.comment = payload
         state.loading = "loaded";
+        state.comment = payload
     });
     builder.addCase(
       replyToComment.rejected,(state, action) => {
@@ -195,13 +195,13 @@ const commentsSlice = createSlice({
   extraReducers: (builder) => {
     // get all comments on a post
     builder.addCase(fetchComments.pending, (state) => {
-      state.comments = {};
       state.loading = "loading";
+      state.comments = {};
     });
     builder.addCase(
       fetchComments.fulfilled, (state, { payload }) => {
-        state.comments = payload.comments;
         state.loading = "loaded";
+        state.comments = payload.comments;
     });
     builder.addCase(
       fetchComments.rejected,(state, action) => {
@@ -214,8 +214,8 @@ const commentsSlice = createSlice({
     });
     builder.addCase(
       addComment.fulfilled, (state, { payload }) => {
-        state.comments.unshift(payload)
         state.loading = "loaded";
+        state.comments.unshift(payload)
     });
     builder.addCase(
       addComment.rejected,(state, action) => {

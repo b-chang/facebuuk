@@ -6,7 +6,7 @@ const jwt_decode = require('jwt-decode');
 module.exports = {
   getPosts: async (req, res) => {
     try {
-      const posts = await Post.find().populate('comments').populate({path: 'comments', populate: { path: 'author', model: 'User' }}).populate('author').sort([['createdAt', 'descending']]);
+      const posts = await Post.find().populate({path: 'comments', populate: { path: 'comments', model: 'Comment' }}).populate('author').sort([['createdAt', 'descending']]);
       res.json(posts);
     } catch(e) {
       res.status(400).json(e);
@@ -60,8 +60,9 @@ module.exports = {
   getCommentOnPost: async (req, res) => {
     const postId = req.params.id
     try {
-      const data = await Post.findOne({ _id: postId }).populate({path: 'comments', options: { sort: { 'createdAt': -1 } }, populate: { path: 'author', model: 'User'}})
-      return res.json(data);
+      const comment = await Post.findOne({ _id: postId }).populate({path: 'comments', options: { sort: { 'createdAt': -1 } }, populate: { path: 'author', model: 'User'}}).populate({path: 'comments', populate: { path: 'comments', model: 'Comment'}})
+      const data = await comment.populate({path: 'comments.comments', populate: {path: 'author', model: 'User'}})
+      return res.json(data)
     } catch(e) {
       return res.status(400).json(e);
     }

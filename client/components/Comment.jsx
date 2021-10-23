@@ -4,14 +4,16 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CommentInput from './CommentInput';
+import Replies from './Replies';
 
 const Comment = (props) => {
   const { comment, index, size, displayComments } = props;
-
   const { content, author, createdAt, _id } = comment;
   const [hasLiked, setHasLiked] = useState(false);
   const [showCommentReplyBox, setShowCommentReplyBox] = useState(false);
   const { user, comment: newComment } = useSelector((state) => state);
+  const [showReplies, setShowReplies] = useState(comment.comments);
+  const [commentAdded, setCommentAdded] = useState(false);
   const date = new Date(createdAt).toLocaleString();
   const [numberOfLikes, setNumberOfLikes] = useState(comment.likes.length);
   const colorLikeButton = () => {
@@ -38,6 +40,12 @@ const Comment = (props) => {
     colorLikeButton();
   }, []);
 
+  useEffect(() => {
+    if (newComment.loading === 'loaded') {
+      setShowReplies((prev) => [...prev, newComment.comment]);
+    }
+  }, []);
+
   return (
     <div
       className={`flex flex-col space-x-1 bg-white text-gray-400 p-4 ${
@@ -55,19 +63,30 @@ const Comment = (props) => {
           layout="fixed"
         />
         <div className="flex flex-col flex-grow">
-          <div className="rounded-lg bg-gray-100 flex-grow px-3 focus:outline-none max-h-52 max-w-xl overflow-y-auto scrollbar-hide">
-            <p className="font-bold">
-              {author.firstName} {author.lastName}
-            </p>
-            <div className="relative">
-              <p>{content}</p>
-              {numberOfLikes > 0 && (
+          <div className="relative">
+            <div
+              className="relative rounded-lg bg-gray-100 flex-grow px-3 focus:outline-none max-h-52 max-w-xl overflow-y-auto
+          scrollbar-hide"
+            >
+              <p className="font-bold">
+                {author.firstName} {author.lastName}
+              </p>
+              <div className="">
+                <p className="">{content}</p>
+                {/* {numberOfLikes > 0 && (
                 <div className="absolute right-1 inset-y-0 top-4 flex items-center justify-center rounded-lg h-6 w-10 bg-gray-200 text-blue-500">
                   <ThumbUpIcon className="h-4 text-blue-500" />
                   {numberOfLikes}
                 </div>
-              )}
+              )} */}
+              </div>
             </div>
+            {numberOfLikes > 0 && (
+              <div className="absolute -bottom-1 right-0 md:-bottom-2 md:right-6 flex items-center justify-center rounded-lg h-6 w-10 bg-gray-200 text-blue-500">
+                <ThumbUpIcon className="h-4 text-blue-500" />
+                {numberOfLikes}
+              </div>
+            )}
           </div>
           <div className="flex items-center space-x-2">
             <span
@@ -86,8 +105,18 @@ const Comment = (props) => {
             </span>
             <p className="text-xs">{date}</p>
           </div>
+          {showReplies.length
+            ? showReplies.map((comment, idx) => (
+                <Replies key={idx} comment={comment} />
+              ))
+            : ''}
           {showCommentReplyBox ? (
-            <CommentInput user={user.data} id={_id} reply={true} />
+            <CommentInput
+              user={user.data}
+              id={_id}
+              reply={true}
+              setCommentAdded={setCommentAdded}
+            />
           ) : (
             ''
           )}
