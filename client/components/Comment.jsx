@@ -14,16 +14,17 @@ const Comment = (props) => {
   const { user, comment: newComment } = useSelector((state) => state);
   const [showReplies, setShowReplies] = useState(comment.comments);
   const [commentAdded, setCommentAdded] = useState(false);
+  const [focusComment, setFocusComment] = useState(false);
   const date = new Date(createdAt).toLocaleString();
-  console.log('CHECKING COMMENTS', comment);
   const [numberOfLikes, setNumberOfLikes] = useState(comment.likes.length);
+
   const colorLikeButton = () => {
-    if (comment.likes.includes(user.data._id)) {
+    if (comment.likes.some((like) => like._id === user.data._id)) {
       setHasLiked(true);
     }
   };
 
-  const likeComment = async (id) => {
+  const handleLike = async (id) => {
     try {
       const response = await axios.put(
         `http://localhost:8000/api/post/comment/${id}/like-comment`,
@@ -35,6 +36,11 @@ const Comment = (props) => {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const highlightComment = () => {
+    setFocusComment((prev) => !prev);
+    setShowCommentReplyBox((prev) => !prev);
   };
 
   useEffect(() => {
@@ -64,37 +70,37 @@ const Comment = (props) => {
           layout="fixed"
         />
         <div className="flex flex-col flex-grow">
-          <div className="relative">
-            <div
-              className="relative rounded-lg bg-gray-100 flex-grow px-3 focus:outline-none max-h-52 max-w-xl overflow-y-auto
-          scrollbar-hide"
-            >
-              <p className="font-bold">
-                {author.firstName} {author.lastName}
-              </p>
-              <div className="">
-                <p className="">{content}</p>
-              </div>
+          <div
+            className={`relative rounded-lg ${
+              focusComment ? 'bg-blue-100' : 'bg-gray-100'
+            } flex-grow p-3 focus:outline-none max-h-52 max-w-xl overflow-y-auto
+          scrollbar-hide`}
+          >
+            <p className="font-bold">
+              {author.firstName} {author.lastName}
+            </p>
+            <div className="">
+              <p className="">{content}</p>
             </div>
-            {numberOfLikes > 0 && (
-              <div className="absolute -bottom-1 right-0 md:-bottom-2 md:right-7 flex items-center justify-center rounded-lg h-6 w-10 bg-gray-200 text-blue-500">
-                <ThumbUpIcon className="h-4 text-blue-500" />
-                {numberOfLikes}
-              </div>
-            )}
           </div>
+          {numberOfLikes > 0 && (
+            <div className="absolute -bottom-1 right-0 md:-bottom-2 md:right-7 flex items-center justify-center rounded-lg h-6 w-10 bg-gray-200 text-blue-500">
+              <ThumbUpIcon className="h-4 text-blue-500" />
+              {numberOfLikes}
+            </div>
+          )}
           <div className="flex items-center space-x-2">
             <span
               className={`ml-1 text-xs hover:underline hover:cursor-pointer ${
                 hasLiked ? 'text-blue-500' : ''
               }`}
-              onClick={() => likeComment(comment._id)}
+              onClick={() => handleLike(comment._id)}
             >
               Like
             </span>
             <span
               className="ml-1 text-xs hover:underline hover:cursor-pointer"
-              onClick={() => setShowCommentReplyBox((prev) => !prev)}
+              onClick={() => highlightComment()}
             >
               Reply
             </span>
@@ -109,18 +115,18 @@ const Comment = (props) => {
                 />
               ))
             : ''}
-          {showCommentReplyBox ? (
-            <CommentInput
-              user={user.data}
-              id={_id}
-              reply={true}
-              setCommentAdded={setCommentAdded}
-            />
-          ) : (
-            ''
-          )}
         </div>
       </div>
+      {showCommentReplyBox ? (
+        <CommentInput
+          user={user.data}
+          id={_id}
+          reply={true}
+          setCommentAdded={setCommentAdded}
+        />
+      ) : (
+        ''
+      )}
     </div>
   );
 };

@@ -29,6 +29,20 @@ export const addComment = createAsyncThunk(
     }
 });
 
+export const likeComment = createAsyncThunk(
+  'comment/likeComment', async (payload, thunkAPI) => {
+    const { commentId, userId, removeLike } = payload
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/api/post/comment/${commentId}/like-comment`,
+        { userId, removeLike }
+      );
+      return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue({ error: error.message });
+    }
+});
+
 export const replyToComment = createAsyncThunk(
   'comment/replyToComment', async (comment, thunkAPI) => {
     try {
@@ -58,6 +72,20 @@ const commentSlice = createSlice({
         state.loading = "error";
         state.error = action.error.message;
     });
+    // like a comment
+    builder.addCase(likeComment.pending, (state) => {
+      state.loading = "loading";
+    });
+    builder.addCase(
+      likeComment.fulfilled, (state, { payload }) => {
+        state.loading = "loaded";
+        state.comment = payload
+    });
+    builder.addCase(
+      likeComment.rejected,(state, action) => {
+        state.loading = "error";
+        state.error = action.error.message;
+    });
   }
 });
 
@@ -73,7 +101,6 @@ const commentsSlice = createSlice({
     });
     builder.addCase(
       fetchComments.fulfilled, (state, { payload }) => {
-        console.log('comments slice')
         state.loading = "loaded";
         state.comments = payload.comments;
     });

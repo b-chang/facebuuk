@@ -32,7 +32,7 @@ const CommentInput = (props) => {
   };
 
   return (
-    <div className="flex items-center space-x-1 bg-white text-gray-400 p-4 border-t">
+    <div className="flex items-center space-x-1 bg-white text-gray-400 p-4 mt-3 border-t">
       <Image
         className="rounded-full"
         src={user.image}

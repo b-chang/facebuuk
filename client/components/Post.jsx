@@ -29,7 +29,7 @@ const Post = ({ post }) => {
   });
 
   const colorLikeButton = () => {
-    if (loading === 'loaded' && likes.includes(data._id)) {
+    if (loading === 'loaded' && likes.some((like) => like._id === data._id)) {
       setHasLiked(true);
     }
   };
