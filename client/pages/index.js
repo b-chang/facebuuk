@@ -7,7 +7,7 @@ import Header from '../components/Header';
 import Login from '../components/Login';
 import Sidebar from '../components/Sidebar';
 import Widgets from '../components/Widgets';
-import { fetchUser } from '../store/post/post.reducer';
+import { fetchUser } from '../store/reducer/post-reducer';
 
 export default function Home({ session }) {
   const dispatch = useDispatch();

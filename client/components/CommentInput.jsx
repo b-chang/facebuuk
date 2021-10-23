@@ -1,19 +1,12 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useSpring } from 'react-spring';
-import { addComment, replyToComment } from '../store/post/post.reducer';
+import { addComment, replyToComment } from '../store/reducer/post-reducer';
 
 const CommentInput = (props) => {
   const { user, id, reply, setCommentAdded } = props;
   const [comment, setComment] = useState('');
   const dispatch = useDispatch();
-  const fade = useSpring({
-    from: {
-      opacity: 0,
-    },
-    to: { opacity: 1 },
-  });
 
   const addCommentToPost = async (e) => {
     e.preventDefault();

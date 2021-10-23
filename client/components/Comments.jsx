@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { animated, useSpring } from 'react-spring';
-import { fetchComments } from '../store/post/post.reducer';
+import { fetchComments } from '../store/reducer/post-reducer';
 import Comment from './Comment';
 import CommentInput from './CommentInput';
 

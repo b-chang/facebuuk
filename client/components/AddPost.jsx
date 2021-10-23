@@ -3,7 +3,7 @@ import { CameraIcon, VideoCameraIcon } from '@heroicons/react/solid';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPost } from '../store/post/post.reducer';
+import { addPost } from '../store/reducer/post-reducer';
 
 const AddPost = () => {
   const [postInput, setPostInput] = useState('');

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts } from '../store/post/post.reducer';
+import { fetchPosts } from '../store/reducer/post-reducer';
 import Post from './Post';
 
 const Posts = () => {
