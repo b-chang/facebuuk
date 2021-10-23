@@ -6,7 +6,7 @@ const jwt_decode = require('jwt-decode');
 module.exports = {
   getPosts: async (req, res) => {
     try {
-      const posts = await Post.find().populate({path: 'comments', populate: { path: 'comments', model: 'Comment' }}).populate('author').sort([['createdAt', 'descending']]);
+      const posts = await Post.find().sort([['createdAt', 'descending']]);
       res.json(posts);
     } catch(e) {
       res.status(400).json(e);
@@ -50,7 +50,7 @@ module.exports = {
         {safe: true, upsert: true, new: true}
       );
 
-      const post = await Post.findOne({_id: newPost._id}).populate('author')
+      const post = await Post.findOne({_id: newPost._id})
       return res.json({ message: "Successfully added new post", newPost: post });
     } catch(e) {
       return res.status(400).json(e);
@@ -60,8 +60,7 @@ module.exports = {
   getCommentOnPost: async (req, res) => {
     const postId = req.params.id
     try {
-      const comment = await Post.findOne({ _id: postId }).populate({path: 'comments', options: { sort: { 'createdAt': -1 } }, populate: { path: 'author', model: 'User'}}).populate({path: 'comments', populate: { path: 'comments', model: 'Comment'}})
-      const data = await comment.populate({path: 'comments.comments', populate: {path: 'author', model: 'User'}})
+      const data = await Post.findOne({ _id: postId })
       return res.json(data)
     } catch(e) {
       return res.status(400).json(e);
@@ -82,8 +81,8 @@ module.exports = {
         {_id: postId},
         {$push: {"comments": newComment._id}},
         {safe: true, upsert: true, new: true}
-      ).populate({path: 'comments', options: { sort: { 'createdAt': -1 } }, populate: { path: 'author', model: 'User'}})
-      const comment = await Comment.findOne({ _id: newComment._id.toString() }).populate('author')
+      )
+      const comment = await Comment.findOne({ _id: newComment._id.toString() })
 
       return res.json(comment);
     } catch(e) {
@@ -160,7 +159,7 @@ module.exports = {
       );
       
       const commentId = reply._id.toString()
-      const newReply = await Comment.findOne({ _id: commentId }).populate('author')
+      const newReply = await Comment.findOne({ _id: commentId })
       return res.json(newReply);
     } catch(e) {
       return res.status(400).json(e);

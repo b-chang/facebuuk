@@ -15,6 +15,7 @@ const Comment = (props) => {
   const [showReplies, setShowReplies] = useState(comment.comments);
   const [commentAdded, setCommentAdded] = useState(false);
   const date = new Date(createdAt).toLocaleString();
+  console.log('CHECKING COMMENTS', comment);
   const [numberOfLikes, setNumberOfLikes] = useState(comment.likes.length);
   const colorLikeButton = () => {
     if (comment.likes.includes(user.data._id)) {
@@ -48,7 +49,7 @@ const Comment = (props) => {
 
   return (
     <div
-      className={`flex flex-col space-x-1 bg-white text-gray-400 p-4 ${
+      className={`flex flex-col space-x-1 bg-white text-gray-400 p-4 flex-grow ${
         index === size - 1 || index >= displayComments
           ? 'rounded-b-2xl shadow-md'
           : ''
@@ -73,16 +74,10 @@ const Comment = (props) => {
               </p>
               <div className="">
                 <p className="">{content}</p>
-                {/* {numberOfLikes > 0 && (
-                <div className="absolute right-1 inset-y-0 top-4 flex items-center justify-center rounded-lg h-6 w-10 bg-gray-200 text-blue-500">
-                  <ThumbUpIcon className="h-4 text-blue-500" />
-                  {numberOfLikes}
-                </div>
-              )} */}
               </div>
             </div>
             {numberOfLikes > 0 && (
-              <div className="absolute -bottom-1 right-0 md:-bottom-2 md:right-6 flex items-center justify-center rounded-lg h-6 w-10 bg-gray-200 text-blue-500">
+              <div className="absolute -bottom-1 right-0 md:-bottom-2 md:right-7 flex items-center justify-center rounded-lg h-6 w-10 bg-gray-200 text-blue-500">
                 <ThumbUpIcon className="h-4 text-blue-500" />
                 {numberOfLikes}
               </div>
@@ -107,7 +102,11 @@ const Comment = (props) => {
           </div>
           {showReplies.length
             ? showReplies.map((comment, idx) => (
-                <Replies key={idx} comment={comment} />
+                <Replies
+                  key={idx}
+                  comment={comment}
+                  isLast={idx === showReplies.length - 1 ? true : false}
+                />
               ))
             : ''}
           {showCommentReplyBox ? (

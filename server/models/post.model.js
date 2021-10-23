@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const CommentSchema = require('./comment.model');
 
 const PostSchema = new mongoose.Schema({
   content: {
@@ -8,17 +7,18 @@ const PostSchema = new mongoose.Schema({
     minLength: 1
   },
   author: {
-    type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true
   },
   image: {
     type: String
   },
   likes: [
-    { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    { type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }
   ],
   comments: [
-    { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }
+    { type: mongoose.Schema.Types.ObjectId, ref: 'Comment', autopopulate: true }
   ]
 }, {timestamps: true});
 
+PostSchema.plugin(require('mongoose-autopopulate'));
 module.exports = mongoose.model('Post', PostSchema)

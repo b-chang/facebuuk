@@ -200,6 +200,7 @@ const commentsSlice = createSlice({
     });
     builder.addCase(
       fetchComments.fulfilled, (state, { payload }) => {
+        console.log('comments slice')
         state.loading = "loaded";
         state.comments = payload.comments;
     });
