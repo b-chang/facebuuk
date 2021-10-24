@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const { DATABASE_URL } = require('../config');
+
 mongoose
-  .connect('mongodb://localhost/fb_db', {
+  .connect(DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

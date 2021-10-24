@@ -14,7 +14,7 @@ const PostOptions = ({ id, setPostDeleted }) => {
 
   const handleDelete = async (id) => {
     dispatch(deletePost(id));
-    setPostDeleted(true);
+    setPostDeleted((prev) => ({ ...prev, deleted: true, id: id }));
   };
 
   return (

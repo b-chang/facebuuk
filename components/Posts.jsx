@@ -9,21 +9,29 @@ const Posts = () => {
   const dispatch = useDispatch();
   const [displayPosts, setDisplayPosts] = useState(3);
   const [newlyAddedPosts, setNewlyAddedPosts] = useState([]);
-  const [postDeleted, setPostDeleted] = useState(false);
+  const [postDeleted, setPostDeleted] = useState({ deleted: false, id: null });
   const displayMorePosts = (n = 5) => {
     setDisplayPosts((prev) => prev + 5);
   };
 
   useEffect(() => {
     dispatch(fetchPosts());
-    setPostDeleted(false);
-  }, [postDeleted]);
+
+    if (postDeleted.deleted) {
+      filterPosts(postDeleted.id);
+      setPostDeleted((prev) => ({ ...prev, deleted: false, id: null }));
+    }
+  }, [postDeleted.deleted]);
 
   useEffect(() => {
     if (singlePost.loading === 'loaded') {
       setNewlyAddedPosts((prev) => [...prev, singlePost]);
     }
   }, [singlePost.loading]);
+
+  const filterPosts = (id) => {
+    setNewlyAddedPosts((prev) => prev.filter((state) => state.post._id !== id));
+  };
 
   return (
     <div>
