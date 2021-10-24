@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { animated, useSpring } from 'react-spring';
+import { API_BASE_URL } from '../config';
 import Comments from './Comments';
 import LikeButton from './LikeButton';
 import Likes from './Likes';
@@ -38,7 +39,7 @@ const Post = ({ post, setPostDeleted }) => {
   const likePost = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/posts/${id}/like-post`,
+        `${API_BASE_URL}/posts/${id}/like-post`,
         { _id: currentUser.id, removeLike: hasLiked }
       );
 

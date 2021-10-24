@@ -1,6 +1,7 @@
 import axios from 'axios';
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
+import { API_BASE_URL } from '../../../config';
 const jwt_decode = require('jwt-decode');
 
 const providers = [
@@ -13,7 +14,7 @@ const providers = [
           password: credentials.password
         }
         
-        const response = await axios.post('http://localhost:8000/api/login', userCreds, 
+        const response = await axios.post(`${API_BASE_URL}/login`, userCreds, 
         {
           withCredentials: true,
           credentials: 'include',

@@ -1,12 +1,11 @@
 import { createAsyncThunk, createSelector, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
-
-const url = 'http://localhost:8000/api/posts'
+import { API_BASE_URL } from '../../config';
 
 export const fetchUser = createAsyncThunk(
   'posts/fetchUser', async (id, thunkAPI) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/user/${id}`);
+      const response = await axios.get(`${API_BASE_URL}/user/${id}`);
       return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue({ error: error.message });
@@ -17,7 +16,7 @@ export const fetchUser = createAsyncThunk(
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts', async (_, thunkAPI) => {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(`${API_BASE_URL}/posts`);
       return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue({ error: error.message });
@@ -28,7 +27,7 @@ export const addPost = createAsyncThunk(
   'posts/addPost', async (post, thunkAPI) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/posts`, post)
+        `${API_BASE_URL}/posts`, post)
       return response.data;
     } catch (error) {
       const { data: { message } } = error.response
@@ -40,7 +39,7 @@ export const deletePost = createAsyncThunk(
   'posts/deletePost', async (id, thunkAPI) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8000/api/posts/${id}`)
+        `${API_BASE_URL}/posts/${id}`)
       // return response.data;
       return id
     } catch (error) {
@@ -113,7 +112,7 @@ export const fetchComments = createAsyncThunk(
   'posts/fetchComments', async (id, thunkAPI) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/posts/${id}/comment`
+        `${API_BASE_URL}/posts/${id}/comment`
       );
       return response.data;
     } catch (error) {
@@ -125,7 +124,7 @@ export const addComment = createAsyncThunk(
   'posts/addComment', async (comment, thunkAPI) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/posts/${comment.id}/comment`,
+        `${API_BASE_URL}/posts/${comment.id}/comment`,
         {
           author: comment.author,
           content: comment.content
@@ -140,7 +139,7 @@ export const addComment = createAsyncThunk(
 export const fetchPost = createAsyncThunk(
   'posts/fetchPost', async (id, thunkAPI) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/posts/${id}`);
+      const response = await axios.get(`${API_BASE_URL}/posts/${id}`);
       return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue({ error: error.message });
@@ -186,7 +185,7 @@ const postSlice = createSlice({
 export const replyToComment = createAsyncThunk(
   'comment/replyToComment', async (comment, thunkAPI) => {
     try {
-      const response = await axios.put(`http://localhost:8000/api/post/comment/reply/${comment.id}`, comment);
+      const response = await axios.put(`${API_BASE_URL}/post/comment/reply/${comment.id}`, comment);
       return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue({ error: error.message });

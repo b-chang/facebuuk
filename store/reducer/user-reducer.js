@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 
 export const fetchUser = createAsyncThunk(
   'posts/fetchUser', async (id, thunkAPI) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/user/${id}`);
+      const response = await axios.get(`${API_BASE_URL}/user/${id}`);
       return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue({ error: error.message });

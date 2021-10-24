@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 
 export const fetchComments = createAsyncThunk(
   'posts/fetchComments', async (id, thunkAPI) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/posts/${id}/comment`
+        `${API_BASE_URL}/posts/${id}/comment`
       );
       return response.data;
     } catch (error) {
@@ -17,7 +18,7 @@ export const addComment = createAsyncThunk(
   'posts/addComment', async (comment, thunkAPI) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/posts/${comment.id}/comment`,
+        `${API_BASE_URL}/posts/${comment.id}/comment`,
         {
           author: comment.author,
           content: comment.content
@@ -34,7 +35,7 @@ export const likeComment = createAsyncThunk(
     const { commentId, userId, removeLike } = payload
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/post/comment/${commentId}/like-comment`,
+        `${API_BASE_URL}/post/comment/${commentId}/like-comment`,
         { userId, removeLike }
       );
       return response.data;
@@ -46,7 +47,7 @@ export const likeComment = createAsyncThunk(
 export const replyToComment = createAsyncThunk(
   'comment/replyToComment', async (comment, thunkAPI) => {
     try {
-      const response = await axios.put(`http://localhost:8000/api/post/comment/reply/${comment.id}`, comment);
+      const response = await axios.put(`${API_BASE_URL}/post/comment/reply/${comment.id}`, comment);
       return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue({ error: error.message });

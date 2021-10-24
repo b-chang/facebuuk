@@ -14,6 +14,7 @@ import {
 import axios from 'axios';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
+import { API_BASE_URL } from '../config';
 import Dropdown from './Dropdown';
 import HeaderIcon from './HeaderIcon';
 
@@ -37,12 +38,9 @@ const Header = (props) => {
 
   const updateProfilePic = async (newImage) => {
     try {
-      const response = await axios.put(
-        `http://localhost:8000/api/user/${user._id}`,
-        {
-          image: newImage,
-        }
-      );
+      const response = await axios.put(`${API_BASE_URL}/user/${user._id}`, {
+        image: newImage,
+      });
       console.log(response);
     } catch (e) {
       console.log(e);

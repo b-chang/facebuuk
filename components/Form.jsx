@@ -24,10 +24,7 @@ const Form = (props) => {
 
     if (loginType === 'SIGN_UP') {
       try {
-        const response = await axios.post(
-          'http://localhost:8000/api/signup',
-          user
-        );
+        const response = await axios.post('${API_BASE_URL}/signup', user);
         redirect = true;
       } catch (e) {
         const { data } = e.response;

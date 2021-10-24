@@ -3,6 +3,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { API_BASE_URL } from '../config';
 import CommentInput from './CommentInput';
 import Replies from './Replies';
 
@@ -27,7 +28,7 @@ const Comment = (props) => {
   const handleLike = async (id) => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/post/comment/${id}/like-comment`,
+        `${API_BASE_URL}/post/comment/${id}/like-comment`,
         { userId: user.data._id, removeLike: hasLiked }
       );
       const { likes } = response.data;
