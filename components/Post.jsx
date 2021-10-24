@@ -62,12 +62,12 @@ const Post = ({ post, setPostDeleted }) => {
       <div className="p-5 bg-white mt-5 rounded-t-2xl shadow-xl">
         <div className="flex justify-between">
           <div className="flex items-center space-x-2">
-            <img
+            <Image
               className="rounded-full"
               src={image}
               width={40}
               height={40}
-              alt=""
+              alt="user image"
             />
             <div>
               <p className="font-medium">{`${firstName} ${lastName}`}</p>
@@ -82,7 +82,12 @@ const Post = ({ post, setPostDeleted }) => {
       </div>
       {postImage && (
         <div className="relative h-56 md:h-96 bg-white">
-          <Image src={postImage} objectFit="cover" layout="fill" />
+          <Image
+            src={postImage}
+            objectFit="cover"
+            layout="fill"
+            alt="image on post"
+          />
         </div>
       )}
       <div className="flex justify-between bg-white shadow-md text-gray-40 p-4">
@@ -91,7 +96,6 @@ const Post = ({ post, setPostDeleted }) => {
           className="text-xs cursor-pointer hover:underline sm:text-base"
           onClick={() => setDisplayComments((prev) => !prev)}
         >
-          {/* this is where the comments are */}
           {numberOfComments ? numberOfComments : null} comments
         </p>
       </div>

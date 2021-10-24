@@ -10,6 +10,7 @@ const Login = () => {
         width={300}
         height={300}
         objectFit="contain"
+        alt="logo"
       />
       <button className="p-5 bg-blue-500 rounded-full text-white text-center cursor-pointer mt-6">
         <Link href="/login"> Login with Email </Link>

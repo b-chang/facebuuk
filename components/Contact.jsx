@@ -12,6 +12,7 @@ const Contact = (props) => {
         width={50}
         height={50}
         layout="fixed"
+        alt="user image"
       />
       <p>{name}</p>
       <div className="absolute bottom-2 left-7 bg-green-400 h-3 w-3 rounded-full animate-bounce"></div>

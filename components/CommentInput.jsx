@@ -39,6 +39,7 @@ const CommentInput = (props) => {
         width={40}
         height={40}
         layout="fixed"
+        alt="user image"
       />
       <form className="flex flex-1" onSubmit={(e) => addCommentToPost(e)}>
         <input

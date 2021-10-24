@@ -68,6 +68,7 @@ const Comment = (props) => {
           width={30}
           height={30}
           layout="fixed"
+          alt="user image"
         />
         <div className="flex flex-col flex-grow relative">
           <div

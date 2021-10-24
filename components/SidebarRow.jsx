@@ -12,6 +12,7 @@ const SidebarRow = (props) => {
           width={30}
           height={30}
           layout="fixed"
+          alt="user image"
         />
       )}
       {Icon && <Icon className="h-8 w-8 text-blue-500" />}

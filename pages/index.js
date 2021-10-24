@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { getSession } from 'next-auth/client';
 import Head from 'next/head';
 import React, { useEffect } from 'react';
@@ -19,7 +20,7 @@ export default function Home({ session }) {
   
   useEffect(() => {
     dispatch(fetchUser(id));
-  }, [dispatch])
+  }, [])
 
   return (
     <div>

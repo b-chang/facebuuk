@@ -58,6 +58,7 @@ const Header = (props) => {
           width={40}
           height={40}
           layout="fixed"
+          alt="logo"
         />
         <div className="flex ml-2 rounded-full bg-gray-50 p-2">
           <SearchIcon className="h-6 text-gray-600" />
@@ -86,12 +87,11 @@ const Header = (props) => {
         <Image
           className="rounded-full cursor-pointer"
           src={user.image}
-          // src="https://links.papareact.com/k2j"
           width="40"
           height="40"
           layout="fixed"
-          // onClick={(e) => editProfilePic(e)}
           onClick={() => filePickerRef.current.click()}
+          alt="user image"
         />
         <input
           ref={filePickerRef}
