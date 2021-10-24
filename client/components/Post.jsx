@@ -8,8 +8,9 @@ import { animated, useSpring } from 'react-spring';
 import Comments from './Comments';
 import LikeButton from './LikeButton';
 import Likes from './Likes';
+import PostOptions from './PostOptions';
 
-const Post = ({ post }) => {
+const Post = ({ post, setPostDeleted }) => {
   const { content, author, createdAt, image: postImage, _id: id, likes } = post;
   const { firstName, lastName, image, _id } = author;
   const state = useSelector((state) => state);
@@ -59,17 +60,22 @@ const Post = ({ post }) => {
       style={fade}
     >
       <div className="p-5 bg-white mt-5 rounded-t-2xl shadow-xl">
-        <div className="flex space-x-2">
-          <img
-            className="rounded-full"
-            src={image}
-            width={40}
-            height={40}
-            alt=""
-          />
-          <div>
-            <p className="font-medium">{`${firstName} ${lastName}`}</p>
-            <p className="text-xs text-gray-400">{date}</p>
+        <div className="flex justify-between">
+          <div className="flex items-center space-x-2">
+            <img
+              className="rounded-full"
+              src={image}
+              width={40}
+              height={40}
+              alt=""
+            />
+            <div>
+              <p className="font-medium">{`${firstName} ${lastName}`}</p>
+              <p className="text-xs text-gray-400">{date}</p>
+            </div>
+          </div>
+          <div className="">
+            <PostOptions setPostDeleted={setPostDeleted} id={id} />
           </div>
         </div>
         <p className="pt-4">{content}</p>

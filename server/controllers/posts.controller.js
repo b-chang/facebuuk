@@ -27,8 +27,18 @@ module.exports = {
 
   getPost: async (req, res) => {
     try {
-      const post = await Post.findOne({_id: req.params.id});
-      res.json({ post });
+      const post = await Post.deleteOne({_id: req.params.id});
+      res.json(post);
+    } catch(e) {
+      res.status(400).json(e);
+    }
+  },
+
+  deletePost: async (req, res) => {
+    console.log('attempting to delete a post...')
+    try {
+      const post = await Post.deleteOne({_id: req.params.id});
+      res.json(post);
     } catch(e) {
       res.status(400).json(e);
     }

@@ -8,6 +8,7 @@ module.exports = (app) => {
   app.get('/api/posts', PostsControllers.getPosts)
   app.get('/api/posts/my-posts', PostsControllers.getUserPosts)
   app.get('/api/posts/:id', PostsControllers.getPost)
+  app.delete('/api/posts/:id', PostsControllers.deletePost)
   app.post('/api/posts', PostsControllers.addPost)
   app.get('/api/posts/:id/comment', PostsControllers.getCommentOnPost)  
   app.post('/api/posts/:id/comment', PostsControllers.addCommentToPost)

@@ -69,26 +69,24 @@ const Comment = (props) => {
           height={30}
           layout="fixed"
         />
-        <div className="flex flex-col flex-grow">
+        <div className="flex flex-col flex-grow relative">
           <div
             className={`relative rounded-lg ${
               focusComment ? 'bg-blue-100' : 'bg-gray-100'
-            } flex-grow p-3 focus:outline-none max-h-52 max-w-xl overflow-y-auto
+            } flex-grow p-3 focus:outline-none max-h-52 max-w-xl
           scrollbar-hide`}
           >
             <p className="font-bold">
               {author.firstName} {author.lastName}
             </p>
-            <div className="">
-              <p className="">{content}</p>
-            </div>
+            <p>{content}</p>
+            {numberOfLikes > 0 && (
+              <div className="absolute -bottom-1 right-0 md:-bottom-4 md:right-7 flex items-center justify-center rounded-lg h-6 w-10 bg-gray-200 text-blue-500">
+                <ThumbUpIcon className="h-4 text-blue-500" />
+                {numberOfLikes}
+              </div>
+            )}
           </div>
-          {numberOfLikes > 0 && (
-            <div className="absolute -bottom-1 right-0 md:-bottom-2 md:right-7 flex items-center justify-center rounded-lg h-6 w-10 bg-gray-200 text-blue-500">
-              <ThumbUpIcon className="h-4 text-blue-500" />
-              {numberOfLikes}
-            </div>
-          )}
           <div className="flex items-center space-x-2">
             <span
               className={`ml-1 text-xs hover:underline hover:cursor-pointer ${

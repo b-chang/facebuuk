@@ -36,6 +36,19 @@ export const addPost = createAsyncThunk(
     }
 });
 
+export const deletePost = createAsyncThunk(
+  'posts/deletePost', async (id, thunkAPI) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/api/posts/${id}`)
+      // return response.data;
+      return id
+    } catch (error) {
+      const { data: { message } } = error.response
+      return thunkAPI.rejectWithValue({ error: message });
+    }
+});
+
 const userSlice = createSlice({
   name: 'user',
   initialState: { data: {}, loading: 'idle', error: '' },
@@ -78,6 +91,20 @@ const postsSlice = createSlice({
       fetchPosts.rejected,(state, action) => {
         state.loading = "error";
         state.error = action.error.message;
+    });
+    // delete a post
+    builder.addCase(deletePost.pending, (state) => {
+      state.loading = "loading";
+    });
+    builder.addCase(
+      deletePost.fulfilled, (state, { payload }) => {
+        state.loading = "loaded";
+        state.data.filter(post => post._id !== payload)
+    });
+    builder.addCase(
+      deletePost.rejected,(state, action) => {
+        state.loading = "error";
+        state.error = action.payload.error;
     });
   }
 });

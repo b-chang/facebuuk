@@ -9,13 +9,15 @@ const Posts = () => {
   const dispatch = useDispatch();
   const [displayPosts, setDisplayPosts] = useState(3);
   const [newlyAddedPosts, setNewlyAddedPosts] = useState([]);
+  const [postDeleted, setPostDeleted] = useState(false);
   const displayMorePosts = (n = 5) => {
     setDisplayPosts((prev) => prev + 5);
   };
 
   useEffect(() => {
     dispatch(fetchPosts());
-  }, []);
+    setPostDeleted(false);
+  }, [postDeleted]);
 
   useEffect(() => {
     if (singlePost.loading === 'loaded') {
@@ -43,7 +45,13 @@ const Posts = () => {
             {allPosts.loading === 'loaded' &&
               allPosts.data.map((post, idx) => {
                 if (idx < displayPosts) {
-                  return <Post key={idx} post={post} />;
+                  return (
+                    <Post
+                      setPostDeleted={setPostDeleted}
+                      key={idx}
+                      post={post}
+                    />
+                  );
                 }
               })}
           </div>
