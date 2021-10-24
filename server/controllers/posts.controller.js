@@ -35,7 +35,6 @@ module.exports = {
   },
 
   deletePost: async (req, res) => {
-    console.log('attempting to delete a post...')
     try {
       const post = await Post.deleteOne({_id: req.params.id});
       res.json(post);

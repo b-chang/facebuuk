@@ -30,7 +30,11 @@ const Posts = () => {
       <div className="flex flex-col-reverse">
         {newlyAddedPosts.length
           ? newlyAddedPosts.map((newPost, idx) => (
-              <Post key={idx} post={newPost.post} />
+              <Post
+                setPostDeleted={setPostDeleted}
+                key={idx}
+                post={newPost.post}
+              />
             ))
           : ''}
       </div>

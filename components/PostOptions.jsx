@@ -13,7 +13,6 @@ const PostOptions = ({ id, setPostDeleted }) => {
   const state = useSelector((state) => state);
 
   const handleDelete = async (id) => {
-    console.log('deleting post', id);
     dispatch(deletePost(id));
     setPostDeleted(true);
   };
