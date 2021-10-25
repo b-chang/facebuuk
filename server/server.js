@@ -8,6 +8,8 @@ require('dotenv').config();
 const { CLIENT_ORIGIN } = require('./config');
 const { PORT } = require('./config');
 
+console.log('test')
+console.log('HELLO', CLIENT_ORIGIN)
 app.use(express.json({limit: '50mb', extended: true}));
 app.use(express.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use(cookieParser());

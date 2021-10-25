@@ -3,9 +3,12 @@ import { signIn } from 'next-auth/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { API_BASE_URL } from '../config';
 import FORM_TYPE from './form-type';
 
 const Form = (props) => {
+  console.log('checking base url from react', API_BASE_URL);
+  console.log('CHECKING', process.env.TEST_API_BASE_URL);
   const { loginType, btnText } = props;
   const { initialState, inputs } = FORM_TYPE[loginType];
   const [user, setUser] = useState({ ...initialState });
@@ -24,7 +27,7 @@ const Form = (props) => {
 
     if (loginType === 'SIGN_UP') {
       try {
-        const response = await axios.post('${API_BASE_URL}/signup', user);
+        const response = await axios.post(`${API_BASE_URL}/signup`, user);
         redirect = true;
       } catch (e) {
         const { data } = e.response;

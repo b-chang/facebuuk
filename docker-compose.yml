@@ -1,33 +1,19 @@
 version: '3.4'
 
 services:
-  site:
-    build:
-      context: .
-      target: test-target
-      args:
-        npm_install_command: install
-    volumes:
-      # This bind mount allows changes on the host file system to affect the container.
-      # Saving a code file can cause an incremental build, a hot reload in the browser,
-      # and a reconnection of the debugger.
-      # The mount is in delegated mode:
-      # Changes on the host, like saving a code file, immediately affect the container.
-      # Changes within the container, like build output, make their way back to the host,
-      # but are not strictly synchronized.
-      - .:/usr/src/app:delegated
+  nextjs: # name of the first service
+    build: ./app # specify the directory of the Dockerfile
     ports:
-      - 3000:3000
-      - 9229:9229
-    command: npm run dev
-  storybook:
-    build:
-      context: .
-      target: test-target
-      args:
-        npm_install_command: install
-    volumes:
-      - .:/usr/src/app:delegated
+      - '3000:3000' # maps port 4200 on localhost to 80 in container
+    depends_on:
+      - 'express'
+
+  express: # name of the second service
+    build: # specify the directory of the Dockerfile
+      context: ./server
+      dockerfile: Dockerfile
+    command: sh start.sh
     ports:
-      - 6006:6006
-    command: npm run storybook
+      - '8000:8000' # maps port 8000 on localhost to 8000 in container
+    expose:
+      - '8000'
