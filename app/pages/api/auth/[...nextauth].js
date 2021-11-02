@@ -14,6 +14,7 @@ const providers = [
           password: credentials.password
         }
         
+        const res = await axios.get(`${API_BASE_URL}/posts`)
         const response = await axios.post(`${API_BASE_URL}/login`, userCreds, 
         {
           withCredentials: true,

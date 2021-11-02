@@ -4,6 +4,11 @@ const Comment = require('../models/comment.model');
 const jwt_decode = require('jwt-decode');
 
 module.exports = {
+  test: async (req, res) => {
+    console.log('testing connection')
+    return res.json('connected to the test route')
+  },
+
   getPosts: async (req, res) => {
     try {
       const posts = await Post.find().sort([['createdAt', 'descending']]);

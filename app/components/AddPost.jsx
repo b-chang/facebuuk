@@ -27,7 +27,7 @@ const AddPost = () => {
     dispatch(addPost(post));
     setPostInput('');
   };
-
+  console.log('image', imageToPost)
   const addImageToPost = (e) => {
     const reader = new FileReader();
     if (e.target.files[0]) {
@@ -81,6 +81,8 @@ const AddPost = () => {
               className="h-10 object-contain"
               src={imageToPost}
               alt="user image"
+              width={40}
+              height={40}
             />
             <p className="text-xs text-red-500 text-center">Remove</p>
           </div>

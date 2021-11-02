@@ -15,4 +15,5 @@ module.exports = (app) => {
   app.put('/api/posts/:id/like-post', PostsControllers.likePost)  
   app.put('/api/post/comment/:id/like-comment', PostsControllers.likeComment)
   app.put('/api/post/comment/reply/:id', PostsControllers.replyToComment)
+  app.get('/api/something/post', PostsControllers.test)
 }

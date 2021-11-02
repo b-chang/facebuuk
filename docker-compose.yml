@@ -1,19 +1,32 @@
-version: '3.4'
+version: '3.9'
 
 services:
-  nextjs: # name of the first service
-    build: ./app # specify the directory of the Dockerfile
-    ports:
-      - '3000:3000' # maps port 4200 on localhost to 80 in container
+  nextjs-ui: # name of the first service
+    container_name: nextjs-ui
+    build:
+      context: ./app # specify the directory of the Dockerfile
+      dockerfile: Dockerfile
     depends_on:
-      - 'express'
+      - 'node-api'
+    ports:
+      - '3000:3000'
+    # volumes:
+    #   - ./app:/usr/src/app/app
+    #   - /usr/src/app/node_modules
+    expose:
+      - '3000'
 
-  express: # name of the second service
+  node-api: # name of the second service
+    container_name: node-api
     build: # specify the directory of the Dockerfile
       context: ./server
       dockerfile: Dockerfile
     command: sh start.sh
+    network_mode: "host"
     ports:
-      - '8000:8000' # maps port 8000 on localhost to 8000 in container
+      - '8000:8000'
+    # volumes:
+    #   - ./server:/usr/src/server/server
+    #   - /usr/src/app/server/node_modules
     expose:
       - '8000'
