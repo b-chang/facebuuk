@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
-import { signOut } from 'next-auth/client';
+import { signOut } from 'next-auth/react';
 import { Fragment } from 'react';
 
 function classNames(...classes) {

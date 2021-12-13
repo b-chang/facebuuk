@@ -1,11 +1,11 @@
 import axios from 'axios';
 import NextAuth from 'next-auth';
-import Providers from 'next-auth/providers';
+import CredentialsProvider from "next-auth/providers/credentials";
 import { API_BASE_URL } from '../../../config';
 const jwt_decode = require('jwt-decode');
 
 const providers = [
-  Providers.Credentials({
+  CredentialsProvider({
     name: 'Credentials',
     authorize: async (credentials) => {
       try {
@@ -14,7 +14,6 @@ const providers = [
           password: credentials.password
         }
         
-        const res = await axios.get(`${API_BASE_URL}/posts`)
         const response = await axios.post(`${API_BASE_URL}/login`, userCreds, 
         {
           withCredentials: true,
@@ -25,7 +24,8 @@ const providers = [
         const { name } = response.data.user
         const user = {
           ...id,
-          name
+          name,
+          token: response.data.accessToken
         }
         if (response) {
           return user
@@ -41,15 +41,16 @@ const providers = [
 ]
 const callbacks = {}
 
-callbacks.jwt = async function jwt(token, user) {
-  if (user) token.user = user
-
+callbacks.jwt = async function jwt({token, user}) {
+  if (user) {
+    token.user = user
+  }
   return Promise.resolve(token)
 }
 
-callbacks.session = async function session(session, token) {
+callbacks.session = async function session({session, token}) {
     session.user = token.user
-    session.accessToken = token.accessToken
+    session.accessToken = token.user.token
     return session
 }
 

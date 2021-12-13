@@ -27,7 +27,7 @@ const AddPost = () => {
     dispatch(addPost(post));
     setPostInput('');
   };
-  console.log('image', imageToPost)
+
   const addImageToPost = (e) => {
     const reader = new FileReader();
     if (e.target.files[0]) {

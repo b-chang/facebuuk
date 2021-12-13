@@ -1,6 +1,6 @@
 import { ChatAltIcon, ShareIcon } from '@heroicons/react/outline';
 import axios from 'axios';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -15,7 +15,7 @@ const Post = ({ post, setPostDeleted }) => {
   const { content, author, createdAt, image: postImage, _id: id, likes } = post;
   const { firstName, lastName, image, _id } = author;
   const state = useSelector((state) => state);
-  const [session] = useSession();
+  const { data: session, status } = useSession();
   const { user: currentUser } = session;
   const { data, loading } = state.user;
   const [hasLiked, setHasLiked] = useState(false);

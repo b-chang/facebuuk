@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -47,6 +47,4 @@ export async function getServerSideProps(context) {
       session
     }
   }
-
-  return { props: { users: users } }
 }
